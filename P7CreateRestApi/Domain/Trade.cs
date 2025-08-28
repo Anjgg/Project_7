@@ -4,7 +4,7 @@ namespace Dot.Net.WebApi.Domain
 {
     public class Trade
     {
-        public int TradeId { get; set; }
+        public int Id { get; set; }
         public string Account { get; set; } = string.Empty;
         public string AccountType { get; set; } = string.Empty;
         public double? BuyQuantity { get; set; }
@@ -25,6 +25,5 @@ namespace Dot.Net.WebApi.Domain
         public string DealType { get; set; } = string.Empty;
         public string SourceListId { get; set; } = string.Empty;
         public string Side { get; set; } = string.Empty;
-
     }
 }

@@ -13,10 +13,10 @@ namespace Dot.Net.WebApi.Data
         }
 
         public DbSet<User> Users { get; set;} = null!;
-        public DbSet<RuleName> RuleNames { get; set; } = null!;
+        public DbSet<Rule> RuleNames { get; set; } = null!;
         public DbSet<Rating> Ratings { get; set; } = null!;
         public DbSet<CurvePoint> CurvePoints { get; set; } = null!;
         public DbSet<Trade> Trades { get; set; } = null!;
-        public DbSet<BidList> BidLists { get; set; } = null!;
+        public DbSet<Bid> BidLists { get; set; } = null!;
     }
 }

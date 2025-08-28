@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace P7CreateRestApi.Migrations
 {
     [DbContext(typeof(LocalDbContext))]
-    [Migration("20250827190020_Initial")]
-    partial class Initial
+    [Migration("20250828105416_correctDB")]
+    partial class correctDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,18 +26,15 @@ namespace P7CreateRestApi.Migrations
 
             modelBuilder.Entity("Dot.Net.WebApi.Domain.Bid", b =>
                 {
-                    b.Property<int>("BidListId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BidListId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Account")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("Ask")
-                        .HasColumnType("float");
 
                     b.Property<double?>("AskQuantity")
                         .HasColumnType("float");
@@ -46,10 +43,7 @@ namespace P7CreateRestApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double?>("Bid")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime?>("BidListDate")
+                    b.Property<DateTime?>("BidDate")
                         .HasColumnType("datetime2");
 
                     b.Property<double?>("BidQuantity")
@@ -109,7 +103,7 @@ namespace P7CreateRestApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("BidListId");
+                    b.HasKey("Id");
 
                     b.ToTable("BidLists");
                 });
@@ -127,9 +121,6 @@ namespace P7CreateRestApi.Migrations
 
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<byte?>("CurveId")
-                        .HasColumnType("tinyint");
 
                     b.Property<double?>("CurvePointValue")
                         .HasColumnType("float");
@@ -209,11 +200,11 @@ namespace P7CreateRestApi.Migrations
 
             modelBuilder.Entity("Dot.Net.WebApi.Domain.Trade", b =>
                 {
-                    b.Property<int>("TradeId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TradeId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Account")
                         .IsRequired()
@@ -288,7 +279,7 @@ namespace P7CreateRestApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("TradeId");
+                    b.HasKey("Id");
 
                     b.ToTable("Trades");
                 });

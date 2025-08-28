@@ -19,14 +19,14 @@ namespace Dot.Net.WebApi.Controllers
 
         [HttpGet]
         [Route("add")]
-        public IActionResult AddRuleName([FromBody]RuleName trade)
+        public IActionResult AddRuleName([FromBody]Rule trade)
         {
             return Ok();
         }
 
         [HttpGet]
         [Route("validate")]
-        public IActionResult Validate([FromBody]RuleName trade)
+        public IActionResult Validate([FromBody]Rule trade)
         {
             // TODO: check data valid and save to db, after saving return RuleName list
             return Ok();
@@ -42,7 +42,7 @@ namespace Dot.Net.WebApi.Controllers
 
         [HttpPost]
         [Route("update/{id}")]
-        public IActionResult UpdateRuleName(int id, [FromBody] RuleName rating)
+        public IActionResult UpdateRuleName(int id, [FromBody] Rule rating)
         {
             // TODO: check required fields, if valid call service to update RuleName and return RuleName list
             return Ok();
