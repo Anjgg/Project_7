@@ -10,19 +10,17 @@ namespace P7CreateRestApi.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "BidLists",
+                name: "Bids",
                 columns: table => new
                 {
-                    BidListId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Account = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BidType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BidQuantity = table.Column<double>(type: "float", nullable: true),
                     AskQuantity = table.Column<double>(type: "float", nullable: true),
-                    Bid = table.Column<double>(type: "float", nullable: true),
-                    Ask = table.Column<double>(type: "float", nullable: true),
                     Benchmark = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BidListDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    BidDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Commentary = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BidSecurity = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BidStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -39,7 +37,7 @@ namespace P7CreateRestApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BidLists", x => x.BidListId);
+                    table.PrimaryKey("PK_Bids", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -48,7 +46,6 @@ namespace P7CreateRestApi.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CurveId = table.Column<byte>(type: "tinyint", nullable: true),
                     AsOfDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Term = table.Column<double>(type: "float", nullable: true),
                     CurvePointValue = table.Column<double>(type: "float", nullable: true),
@@ -65,9 +62,9 @@ namespace P7CreateRestApi.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MoodysRating = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SandPRating = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FitchRating = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Moodys = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SandP = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Fitch = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OrderNumber = table.Column<byte>(type: "tinyint", nullable: true)
                 },
                 constraints: table =>
@@ -76,7 +73,7 @@ namespace P7CreateRestApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RuleNames",
+                name: "Rules",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -90,14 +87,14 @@ namespace P7CreateRestApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RuleNames", x => x.Id);
+                    table.PrimaryKey("PK_Rules", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Trades",
                 columns: table => new
                 {
-                    TradeId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Account = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AccountType = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -122,7 +119,7 @@ namespace P7CreateRestApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Trades", x => x.TradeId);
+                    table.PrimaryKey("PK_Trades", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -145,7 +142,7 @@ namespace P7CreateRestApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BidLists");
+                name: "Bids");
 
             migrationBuilder.DropTable(
                 name: "CurvePoints");
@@ -154,7 +151,7 @@ namespace P7CreateRestApi.Migrations
                 name: "Ratings");
 
             migrationBuilder.DropTable(
-                name: "RuleNames");
+                name: "Rules");
 
             migrationBuilder.DropTable(
                 name: "Trades");
