@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Dot.Net.WebApi.Domain;
+using P7CreateRestApi.Domain;
 
-namespace Dot.Net.WebApi.Data
+namespace P7CreateRestApi.Data
 {
     public class LocalDbContext : DbContext
     {
@@ -13,10 +13,10 @@ namespace Dot.Net.WebApi.Data
         }
 
         public DbSet<User> Users { get; set;} = null!;
-        public DbSet<Rule> RuleNames { get; set; } = null!;
+        public DbSet<Rule> Rules { get; set; } = null!;
         public DbSet<Rating> Ratings { get; set; } = null!;
         public DbSet<CurvePoint> CurvePoints { get; set; } = null!;
         public DbSet<Trade> Trades { get; set; } = null!;
-        public DbSet<Bid> BidLists { get; set; } = null!;
+        public DbSet<Bid> Bids { get; set; } = null!;
     }
 }

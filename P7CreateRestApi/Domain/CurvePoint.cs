@@ -1,6 +1,4 @@
-using System;
-
-namespace Dot.Net.WebApi.Domain
+namespace P7CreateRestApi.Domain
 {
     public class CurvePoint
     {

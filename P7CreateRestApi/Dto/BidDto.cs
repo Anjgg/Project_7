@@ -1,10 +1,10 @@
-namespace P7CreateRestApi.Domain
+﻿namespace P7CreateRestApi.Models
 {
-    public class Bid
+    public class BidDto
     {
         public int Id { get; set; }
-        public string Account { get; set; } = string.Empty;
-        public string Type { get; set; } = string.Empty;
+        public required string Account { get; set; }
+        public required string Type { get; set; }
         public double? BidQuantity { get; set; }
         public double? AskQuantity { get; set; }
         public string Benchmark { get; set; } = string.Empty;
@@ -21,6 +21,6 @@ namespace P7CreateRestApi.Domain
         public string DealName { get; set; } = string.Empty;
         public string DealType { get; set; } = string.Empty;
         public string SourceListId { get; set; } = string.Empty;
-        public string Side { get; set; } = string.Empty;  
+        public string Side { get; set; } = string.Empty;
     }
 }

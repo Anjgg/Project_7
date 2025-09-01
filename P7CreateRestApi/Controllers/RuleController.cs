@@ -1,11 +1,11 @@
-using Dot.Net.WebApi.Domain;
 using Microsoft.AspNetCore.Mvc;
+using P7CreateRestApi.Domain;
 
-namespace Dot.Net.WebApi.Controllers
+namespace P7CreateRestApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class RuleNameController : ControllerBase
+    public class RuleController : ControllerBase
     {
         // TODO: Inject RuleName service
 
