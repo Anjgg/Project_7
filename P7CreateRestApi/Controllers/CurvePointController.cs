@@ -1,58 +1,76 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using P7CreateRestApi.Domain;
+using P7CreateRestApi.Dto;
+using P7CreateRestApi.Services;
+using P7CreateRestApi.SwaggerConfig;
 
 namespace P7CreateRestApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/curve-points")]
     public class CurvePointController : ControllerBase
     {
-        // TODO: Inject Curve Point service
+        private readonly ICurvePointService _service;
 
-        [HttpGet]
-        [Route("list")]
-        public IActionResult Home()
+        public CurvePointController(ICurvePointService service)
         {
-            return Ok();
+            _service = service;
         }
 
         [HttpGet]
-        [Route("add")]
-        public IActionResult AddCurvePoint([FromBody]CurvePoint curvePoint)
+        [SwaggerDocumentation("List all curve points", "Create a list of all curve points present in the database", (int)CrudType.GetAll)]
+        public async Task<IActionResult> ListAllCurvePoint()
         {
-            return Ok();
+            var curvePoint = await _service.GetAllAsync();
+            if (curvePoint == null)
+                return NotFound(); //404
+            else
+                return Ok(curvePoint); //200
         }
 
-        [HttpGet]
-        [Route("validate")]
-        public IActionResult Validate([FromBody]CurvePoint curvePoint)
+        [HttpGet("{curve_point_id}")]
+        [SwaggerDocumentation("Get one curve point", "Retrieve a specific curve point in the database", (int)CrudType.GetById)]
+        public async Task<IActionResult> GetCurvePoint(int curve_point_id)
         {
-            // TODO: check data valid and save to db, after saving return bid list
-            return Ok();
-        }
+            var curvePoint = await _service.GetByIdAsync(curve_point_id);
 
-        [HttpGet]
-        [Route("update/{id}")]
-        public IActionResult ShowUpdateForm(int id)
-        {
-            // TODO: get CurvePoint by Id and to model then show to the form
-            return Ok();
+            if (curvePoint == null)
+                return NotFound(); //404
+            else
+                return Ok(curvePoint); //200
         }
 
         [HttpPost]
-        [Route("update/{id}")]
-        public IActionResult UpdateCurvePoint(int id, [FromBody] CurvePoint curvePoint)
+        [SwaggerDocumentation("Add one curve point", "Create a new curve point in the database", (int)CrudType.Create)]
+        public async Task<IActionResult> CreateCurvePoint([FromBody]CurvePointDto curvePoint)
         {
-            // TODO: check required fields, if valid call service to update Curve and return Curve list
-            return Ok();
+            var created = await _service.CreateAsync(curvePoint);
+
+            return CreatedAtAction(nameof(CreateCurvePoint), new { id = created.Id }, created); //201
         }
 
-        [HttpDelete]
-        [Route("{id}")]
-        public IActionResult DeleteBid(int id)
+        [HttpPost("{curve_point_id}")]
+        [SwaggerDocumentation("Update one curve point", "Update an existing curve point stored in database", (int)CrudType.Update)]
+        public async Task<IActionResult> UpdateCurvePoint(int curve_point_id, [FromBody] CurvePointDto curvePointDto)
         {
-            // TODO: Find Curve by Id and delete the Curve, return to Curve list
-            return Ok();
+            var updated = await _service.UpdateAsync(curve_point_id, curvePointDto);
+
+            if (updated == null)
+                return NotFound(); //404
+            else
+                return NoContent(); //204
+        }
+
+        [HttpDelete("{curve_point_id}")]
+        [SwaggerDocumentation("Delete one curve point", "Delete a specific curve point in the database", (int)CrudType.Delete)]
+        public async Task<IActionResult> DeleteCurvePoint(int curve_point_id)
+        {
+            var hasBeenDeleted = await _service.DeleteAsync(curve_point_id);
+            if (hasBeenDeleted == false)
+                return NotFound(); //404
+            else
+                return NoContent(); //204
         }
     }
 }
