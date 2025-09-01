@@ -95,9 +95,9 @@ namespace P7CreateRestApi.Services
             };
         }
 
-        public Task<List<BidDto>> GetAllAsync()
+        public async Task<List<BidDto>> GetAllAsync()
         {
-            return _repository.GetAllAsync()
+            return await _repository.GetAllAsync()
                 .ContinueWith(task => task.Result
                     .Select(bid => new BidDto
                     {
