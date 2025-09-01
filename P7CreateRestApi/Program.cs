@@ -23,6 +23,7 @@ builder.Services.AddDbContext<LocalDbContext>(options =>
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IBidService, BidService>();
+builder.Services.AddScoped<ICurvePointService, CurvePointService>();
 builder.Services.AddApiVersioning(config =>
 {
     config.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
