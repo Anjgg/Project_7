@@ -1,6 +1,8 @@
 using Asp.Versioning.Conventions;
 using Microsoft.EntityFrameworkCore;
 using P7CreateRestApi.Data;
+using P7CreateRestApi.Domain;
+using P7CreateRestApi.Dto;
 using P7CreateRestApi.Repositories;
 using P7CreateRestApi.Services;
 using P7CreateRestApi.SwaggerConfig;
@@ -24,6 +26,7 @@ builder.Services.AddDbContext<LocalDbContext>(options =>
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IBidService, BidService>();
 builder.Services.AddScoped<ICurvePointService, CurvePointService>();
+builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddApiVersioning(config =>
 {
     config.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
@@ -37,6 +40,13 @@ builder.Services.AddApiVersioning(config =>
     options.GroupNameFormat = "'v'V";
     options.SubstituteApiVersionInUrl = true;   
 });
+
+builder.Services.AddAutoMapper(config =>
+{
+    config.CreateMap<Bid, BidDto>().ReverseMap();
+    config.CreateMap<CurvePoint, CurvePointDto>().ReverseMap();
+    config.CreateMap<Rating,RatingDto>().ReverseMap();
+}, typeof(Program));
 
 
 var app = builder.Build();
