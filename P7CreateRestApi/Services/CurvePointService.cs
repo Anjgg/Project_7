@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore.Metadata;
 using P7CreateRestApi.Domain;
 using P7CreateRestApi.Dto;
 using P7CreateRestApi.Models;
@@ -19,64 +20,39 @@ namespace P7CreateRestApi.Services
     public class CurvePointService : ICurvePointService
     {
         private readonly IRepository<CurvePoint> _repository;
+        private readonly IMapper _mapper;
 
-        public CurvePointService(IRepository<CurvePoint> repository)
+        public CurvePointService(IRepository<CurvePoint> repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task<List<CurvePointDto>> GetAllAsync()
         {
             return await _repository.GetAllAsync()
-                .ContinueWith(task => task.Result
-                    .Select(curvePoint => new CurvePointDto
-                    {
-                        Id = curvePoint.Id,
-                        AsOfDate = curvePoint.AsOfDate,
-                        Term = curvePoint.Term,
-                        CurvePointValue = curvePoint.CurvePointValue,
-                        CreationDate = curvePoint.CreationDate
-                    })
-                    .ToList());
+                                    .ContinueWith(task => task.Result
+                                    .Select(curvePoint => _mapper.Map<CurvePointDto>(curvePoint))
+                                    .ToList());
         }
 
         public async Task<CurvePointDto?> GetByIdAsync(int id)
         {
             var curvePoint = await _repository.GetByIdAsync(id);
+
             if (curvePoint == null)
-            {
                 return null;
-            }
-            return new CurvePointDto
-            {
-                Id = curvePoint.Id,
-                AsOfDate = curvePoint.AsOfDate,
-                Term = curvePoint.Term,
-                CurvePointValue = curvePoint.CurvePointValue,
-                CreationDate = curvePoint.CreationDate
-            };
+            else
+                return _mapper.Map<CurvePointDto>(curvePoint);
         }
 
         public async Task<CurvePointDto> CreateAsync(CurvePointDto curvePointDto)
         {
-            var curvePoint = new CurvePoint
-            {
-                AsOfDate = curvePointDto.AsOfDate,
-                Term = curvePointDto.Term,
-                CurvePointValue = curvePointDto.CurvePointValue,
-                CreationDate = curvePointDto.CreationDate
-            };
+            var curvePoint = _mapper.Map<CurvePoint>(curvePointDto);
 
             var created = await _repository.AddAsync(curvePoint);
 
-            return new CurvePointDto
-            {
-                Id = created.Id,
-                AsOfDate = created.AsOfDate,
-                Term = created.Term,
-                CurvePointValue = created.CurvePointValue,
-                CreationDate = created.CreationDate
-            };
+            return _mapper.Map<CurvePointDto>(curvePoint);
         }
 
         public async Task<CurvePointDto?> UpdateAsync(int id, CurvePointDto curvePointDto)
@@ -95,14 +71,7 @@ namespace P7CreateRestApi.Services
 
             var updated = await _repository.UpdateAsync(existingCurvePoint);
 
-            return new CurvePointDto
-            {
-                Id = updated.Id,
-                AsOfDate = updated.AsOfDate,
-                Term = updated.Term,
-                CurvePointValue = updated.CurvePointValue,
-                CreationDate = updated.CreationDate
-            };
+            return _mapper.Map<CurvePointDto>(updated);
         }
 
         public async Task<bool> DeleteAsync(int id)
