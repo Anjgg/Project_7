@@ -4,10 +4,9 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace P7CreateRestApi.SwaggerConfig
 {
     [AttributeUsage(AttributeTargets.Method)]
-    public class SwaggerDocumentationAttribute(string summary, string description, int crudType) : Attribute
+    public class SwaggerDocumentationAttribute(string tag, int crudType) : Attribute
     {
-        public string Summary { get; } = summary;
-        public string Description { get; } = description;
+        public string Tag { get; } = tag;
         public int CrudType { get; } = crudType;
     }
 
@@ -19,8 +18,6 @@ namespace P7CreateRestApi.SwaggerConfig
                 not SwaggerDocumentationAttribute descriptionAttribute)
                 return;
 
-            operation.Summary = descriptionAttribute.Summary;
-            operation.Description = descriptionAttribute.Description;
             var crudType = descriptionAttribute.CrudType;
 
             // Remove the default 200 response, which was added by default by Swashbuckle
@@ -28,26 +25,36 @@ namespace P7CreateRestApi.SwaggerConfig
             switch (crudType)
             {
                 case (int)CrudType.GetAll:
+                    operation.Summary = $"List all {descriptionAttribute.Tag}s";
+                    operation.Description = $"Create a list of all {descriptionAttribute.Tag}s present in the database";
                     operation.Responses.Add("200", new OpenApiResponse { Description = "A list of items was successfully retrieved." });
                     operation.Responses.Add("500", new OpenApiResponse { Description = "Internal Server Error along with the complete Error message." });
                     break;
                 case (int)CrudType.GetById:
+                    operation.Summary = $"Get one {descriptionAttribute.Tag}";
+                    operation.Description = $"Retrieve a specific {descriptionAttribute.Tag} in the database";
                     operation.Responses.Add("200", new OpenApiResponse { Description = "The item was successfully retrieved." });
                     operation.Responses.Add("404", new OpenApiResponse { Description = "The item was not found." });
                     operation.Responses.Add("500", new OpenApiResponse { Description = "Internal Server Error along with the complete Error message." });
                     break;
                 case (int)CrudType.Create:
+                    operation.Summary = $"Add one {descriptionAttribute.Tag}";
+                    operation.Description = $"Create a new {descriptionAttribute.Tag} in the database";
                     operation.Responses.Add("201", new OpenApiResponse { Description = "The item was successfully created." });
                     operation.Responses.Add("400", new OpenApiResponse { Description = "Bad Request. The request was invalid or cannot be served." });
                     operation.Responses.Add("500", new OpenApiResponse { Description = "Internal Server Error along with the complete Error message." });
                     break;
                 case (int)CrudType.Update:
+                    operation.Summary = $"Update one {descriptionAttribute.Tag}";
+                    operation.Description = $"Update an existing {descriptionAttribute.Tag} stored in database";
                     operation.Responses.Add("204", new OpenApiResponse { Description = "The item was successfully updated." });
                     operation.Responses.Add("400", new OpenApiResponse { Description = "Bad Request. The request was invalid or cannot be served." });
                     operation.Responses.Add("404", new OpenApiResponse { Description = "The item was not found." });
                     operation.Responses.Add("500", new OpenApiResponse { Description = "Internal Server Error along with the complete Error message." });
                     break;
                 case (int)CrudType.Delete:
+                    operation.Summary = $"Delete one {descriptionAttribute.Tag}";
+                    operation.Description = $"Delete a specific {descriptionAttribute.Tag} in the database";
                     operation.Responses.Add("204", new OpenApiResponse { Description = "The item was successfully deleted." });
                     operation.Responses.Add("404", new OpenApiResponse { Description = "The item was not found." });
                     operation.Responses.Add("500", new OpenApiResponse { Description = "Internal Server Error along with the complete Error message." });
