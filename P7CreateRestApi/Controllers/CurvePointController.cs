@@ -19,7 +19,7 @@ namespace P7CreateRestApi.Controllers
         }
 
         [HttpGet]
-        [SwaggerDocumentation("List all curve points", "Create a list of all curve points present in the database", (int)CrudType.GetAll)]
+        [SwaggerDocumentation("curve point", (int)CrudType.GetAll)]
         public async Task<IActionResult> ListAllCurvePoint()
         {
             var curvePoint = await _service.GetAllAsync();
@@ -30,7 +30,7 @@ namespace P7CreateRestApi.Controllers
         }
 
         [HttpGet("{curve_point_id}")]
-        [SwaggerDocumentation("Get one curve point", "Retrieve a specific curve point in the database", (int)CrudType.GetById)]
+        [SwaggerDocumentation("curve point", (int)CrudType.GetById)]
         public async Task<IActionResult> GetCurvePoint(int curve_point_id)
         {
             var curvePoint = await _service.GetByIdAsync(curve_point_id);
@@ -42,7 +42,7 @@ namespace P7CreateRestApi.Controllers
         }
 
         [HttpPost]
-        [SwaggerDocumentation("Add one curve point", "Create a new curve point in the database", (int)CrudType.Create)]
+        [SwaggerDocumentation("curve point", (int)CrudType.Create)]
         public async Task<IActionResult> CreateCurvePoint([FromBody]CurvePointDto curvePoint)
         {
             var created = await _service.CreateAsync(curvePoint);
@@ -51,7 +51,7 @@ namespace P7CreateRestApi.Controllers
         }
 
         [HttpPost("{curve_point_id}")]
-        [SwaggerDocumentation("Update one curve point", "Update an existing curve point stored in database", (int)CrudType.Update)]
+        [SwaggerDocumentation("curve point", (int)CrudType.Update)]
         public async Task<IActionResult> UpdateCurvePoint(int curve_point_id, [FromBody] CurvePointDto curvePointDto)
         {
             var updated = await _service.UpdateAsync(curve_point_id, curvePointDto);
@@ -63,7 +63,7 @@ namespace P7CreateRestApi.Controllers
         }
 
         [HttpDelete("{curve_point_id}")]
-        [SwaggerDocumentation("Delete one curve point", "Delete a specific curve point in the database", (int)CrudType.Delete)]
+        [SwaggerDocumentation("curve point", (int)CrudType.Delete)]
         public async Task<IActionResult> DeleteCurvePoint(int curve_point_id)
         {
             var hasBeenDeleted = await _service.DeleteAsync(curve_point_id);

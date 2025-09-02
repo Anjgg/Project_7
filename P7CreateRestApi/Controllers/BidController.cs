@@ -20,7 +20,7 @@ namespace P7CreateRestApi.Controllers
         }
 
         [HttpGet]
-        [SwaggerDocumentation("List all bids", "Create a list of all bids present in the database", (int)CrudType.GetAll)]
+        [SwaggerDocumentation("bid", (int)CrudType.GetAll)]
         public async Task<IActionResult> ListAllBids()
         {
             var bids = await _service.GetAllAsync();
@@ -31,7 +31,7 @@ namespace P7CreateRestApi.Controllers
         }
 
         [HttpGet("{bid_id}")]
-        [SwaggerDocumentation("Get one bid", "Retrieve a specific bid in the database", (int)CrudType.GetById)]
+        [SwaggerDocumentation("bid", (int)CrudType.GetById)]
 
         public async Task<IActionResult> GetBid(int bid_id)
         {
@@ -44,7 +44,7 @@ namespace P7CreateRestApi.Controllers
         }
 
         [HttpPost]
-        [SwaggerDocumentation("Add one bid", "Create a new bid in the database", (int)CrudType.Create)]
+        [SwaggerDocumentation("bid", (int)CrudType.Create)]
         public async Task<IActionResult> CreateBid([FromBody] BidDto bidDto)
         {
             var created = await _service.CreateAsync(bidDto);
@@ -53,7 +53,7 @@ namespace P7CreateRestApi.Controllers
         }
 
         [HttpPost("{bid_id}")]
-        [SwaggerDocumentation("Update one bid", "Update an existing bid store in database", (int)CrudType.Update)]
+        [SwaggerDocumentation("bid", (int)CrudType.Update)]
         public async Task<IActionResult> UpdateBid(int bid_id, [FromBody] BidDto bidDto)
         {
             var updated = await _service.UpdateAsync(bid_id, bidDto);
@@ -65,7 +65,7 @@ namespace P7CreateRestApi.Controllers
         }
 
         [HttpDelete("{bid_id}")]
-        [SwaggerDocumentation("Delete one bid", "Delete a specific bid in the database", (int)CrudType.Delete)]
+        [SwaggerDocumentation("bid", (int)CrudType.Delete)]
         public async Task<IActionResult> DeleteBid(int bid_id)
         {
             var hasBeenDeleted = await _service.DeleteAsync(bid_id);
