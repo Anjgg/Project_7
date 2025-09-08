@@ -52,7 +52,7 @@ namespace P7CreateRestApi.Controllers
             return CreatedAtAction(nameof(CreateBid), new { id = created.Id }, created); //201
         }
 
-        [HttpPost("{bid_id}")]
+        [HttpPut("{bid_id}")]
         [SwaggerDocumentation("bid", (int)CrudType.Update)]
         public async Task<IActionResult> UpdateBid(int bid_id, [FromBody] BidDto bidDto)
         {

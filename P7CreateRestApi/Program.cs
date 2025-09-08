@@ -27,6 +27,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IBidService, BidService>();
 builder.Services.AddScoped<ICurvePointService, CurvePointService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
+builder.Services.AddScoped<IRuleService, RuleService>();
 builder.Services.AddApiVersioning(config =>
 {
     config.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
@@ -46,6 +47,7 @@ builder.Services.AddAutoMapper(config =>
     config.CreateMap<Bid, BidDto>().ReverseMap();
     config.CreateMap<CurvePoint, CurvePointDto>().ReverseMap();
     config.CreateMap<Rating,RatingDto>().ReverseMap();
+    config.CreateMap<Rule, RuleDto>().ReverseMap();
 }, typeof(Program));
 
 

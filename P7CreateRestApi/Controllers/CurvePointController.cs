@@ -50,7 +50,7 @@ namespace P7CreateRestApi.Controllers
             return CreatedAtAction(nameof(CreateCurvePoint), new { id = created.Id }, created); //201
         }
 
-        [HttpPost("{curve_point_id}")]
+        [HttpPut("{curve_point_id}")]
         [SwaggerDocumentation("curve point", (int)CrudType.Update)]
         public async Task<IActionResult> UpdateCurvePoint(int curve_point_id, [FromBody] CurvePointDto curvePointDto)
         {
