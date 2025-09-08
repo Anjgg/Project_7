@@ -1,59 +1,74 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Domain;
+using P7CreateRestApi.Dto;
+using P7CreateRestApi.Services;
+using P7CreateRestApi.SwaggerConfig;
 
 namespace P7CreateRestApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/rules")]
     public class RuleController : ControllerBase
     {
-        // TODO: Inject RuleName service
+        private readonly IRuleService _service;
 
-        [HttpGet]
-        [Route("list")]
-        public IActionResult Home()
+        public RuleController(IRuleService service)
         {
-            // TODO: find all RuleName, add to model
-            return Ok();
+            _service = service;
         }
 
         [HttpGet]
-        [Route("add")]
-        public IActionResult AddRuleName([FromBody]Rule trade)
+        [SwaggerDocumentation("rule", (int)CrudType.GetAll)]
+        public async Task<IActionResult> ListAllRules()
         {
-            return Ok();
+            var rules = await _service.GetAllAsync();
+            if (rules == null)
+                return NotFound(); //404
+            else
+                return Ok(rules); //200
         }
 
-        [HttpGet]
-        [Route("validate")]
-        public IActionResult Validate([FromBody]Rule trade)
+        [HttpGet("{rule_id}")]
+        [SwaggerDocumentation("rule", (int)CrudType.GetById)]
+        public async Task<IActionResult> GetRule(int rule_id)
         {
-            // TODO: check data valid and save to db, after saving return RuleName list
-            return Ok();
-        }
-
-        [HttpGet]
-        [Route("update/{id}")]
-        public IActionResult ShowUpdateForm(int id)
-        {
-            // TODO: get RuleName by Id and to model then show to the form
-            return Ok();
+            var rule = _service.GetByIdAsync(rule_id);
+            if (rule == null)
+                return NotFound(); //404
+            else
+                return Ok(rule); //200
         }
 
         [HttpPost]
-        [Route("update/{id}")]
-        public IActionResult UpdateRuleName(int id, [FromBody] Rule rating)
+        [SwaggerDocumentation("rule", (int)CrudType.Create)]
+        public async Task<IActionResult> CreateRule([FromBody] RuleDto ruleDto)
         {
-            // TODO: check required fields, if valid call service to update RuleName and return RuleName list
-            return Ok();
+            var created = await _service.CreateAsync(ruleDto);
+            return CreatedAtAction(nameof(CreateRule), new { id = created.Id }, created); //201
+        }
+
+        [HttpPut("{rule_id}")]
+        [SwaggerDocumentation("rule", (int)CrudType.Update)]
+        public async Task<IActionResult> UpdateRule(int rule_id, [FromBody] RuleDto ruleDto)
+        {
+            var updated = await _service.UpdateAsync(rule_id, ruleDto);
+            if (updated == null)
+                return NotFound(); //404
+            else
+                return Ok(updated); //200
         }
 
         [HttpDelete]
-        [Route("{id}")]
-        public IActionResult DeleteRuleName(int id)
+        [SwaggerDocumentation("rule", (int)CrudType.Delete)]
+        public async Task<IActionResult> DeleteRule(int id)
         {
-            // TODO: Find RuleName by Id and delete the RuleName, return to Rule list
-            return Ok();
+            var deleted = await _service.DeleteAsync(id);
+            if (deleted)
+                return NoContent(); //204
+            else
+                return NotFound(); //404
         }
     }
 }

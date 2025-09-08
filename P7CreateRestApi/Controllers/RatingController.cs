@@ -50,7 +50,7 @@ namespace P7CreateRestApi.Controllers
             return CreatedAtAction(nameof(CreateRating), new { id = created.Id }, created); //201
         }
 
-        [HttpPost("{rating_id}")]
+        [HttpPut("{rating_id}")]
         [SwaggerDocumentation("rating", (int)CrudType.Update)]
         public async Task<IActionResult> UpdateRating(int rating_id, [FromBody] RatingDto ratingDto)
         {
