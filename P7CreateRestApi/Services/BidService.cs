@@ -60,26 +60,9 @@ namespace P7CreateRestApi.Services
                 return null;
             }
 
-            existingBid.Id = id; 
-            existingBid.Account = bidDto.Account;
-            existingBid.Type = bidDto.Type;
-            existingBid.BidQuantity = bidDto.BidQuantity;
-            existingBid.CreationDate = bidDto.CreationDate;
-            existingBid.BidDate = bidDto.BidDate;
-            existingBid.BidSecurity = bidDto.BidSecurity;
-            existingBid.BidStatus = bidDto.BidStatus;
-            existingBid.AskQuantity = bidDto.AskQuantity;
-            existingBid.Benchmark = bidDto.Benchmark;
-            existingBid.Commentary = bidDto.Commentary;
-            existingBid.Trader = bidDto.Trader;
-            existingBid.Book = bidDto.Book;
-            existingBid.CreationName = bidDto.CreationName;
-            existingBid.RevisionName = bidDto.RevisionName;
-            existingBid.RevisionDate = bidDto.RevisionDate;
-            existingBid.DealName = bidDto.DealName;
-            existingBid.DealType = bidDto.DealType;
-            existingBid.SourceListId = bidDto.SourceListId;
-            existingBid.Side = bidDto.Side;
+            bidDto.Id = id; // Ensure the ID is set correctly
+
+            _mapper.Map(bidDto, existingBid);
 
             var updated = await _repository.UpdateAsync(existingBid);
 

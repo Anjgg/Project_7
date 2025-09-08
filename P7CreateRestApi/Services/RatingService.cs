@@ -61,11 +61,9 @@ namespace P7CreateRestApi.Services
                 return null;
             }
 
-            existingRating.Id = id;
-            existingRating.SandP = ratingDto.SandP;
-            existingRating.Moodys = ratingDto.Moodys;
-            existingRating.Fitch = ratingDto.Fitch;
-            existingRating.OrderNumber = ratingDto.OrderNumber;
+            ratingDto.Id = id; // Ensure the ID is set correctly
+
+            _mapper.Map(ratingDto, existingRating);
 
             var updated = await _repository.UpdateAsync(existingRating);
 

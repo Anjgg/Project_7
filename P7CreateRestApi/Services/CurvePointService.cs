@@ -63,11 +63,9 @@ namespace P7CreateRestApi.Services
                 return null;
             }
 
-            existingCurvePoint.Id = id;
-            existingCurvePoint.CreationDate = curvePointDto.CreationDate;
-            existingCurvePoint.AsOfDate = curvePointDto.AsOfDate;
-            existingCurvePoint.CurvePointValue = curvePointDto.CurvePointValue;
-            existingCurvePoint.Term = curvePointDto.Term;
+            curvePointDto.Id = id; // Ensure the ID is set correctly
+
+            _mapper.Map(curvePointDto, existingCurvePoint);
 
             var updated = await _repository.UpdateAsync(existingCurvePoint);
 
