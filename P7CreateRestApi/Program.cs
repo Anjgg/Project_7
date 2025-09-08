@@ -28,6 +28,7 @@ builder.Services.AddScoped<IBidService, BidService>();
 builder.Services.AddScoped<ICurvePointService, CurvePointService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IRuleService, RuleService>();
+builder.Services.AddScoped<ITradeService, TradeService>();
 builder.Services.AddApiVersioning(config =>
 {
     config.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
@@ -48,6 +49,7 @@ builder.Services.AddAutoMapper(config =>
     config.CreateMap<CurvePoint, CurvePointDto>().ReverseMap();
     config.CreateMap<Rating,RatingDto>().ReverseMap();
     config.CreateMap<Rule, RuleDto>().ReverseMap();
+    config.CreateMap<Trade, TradeDto>().ReverseMap();
 }, typeof(Program));
 
 
