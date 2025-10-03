@@ -1,36 +1,22 @@
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 using P7CreateRestApi.Data;
 using P7CreateRestApi.Domain;
+using P7CreateRestApi.Dto;
 
 namespace P7CreateRestApi.Repositories
 {
-    public class UserRepository
+    public class UserRepository : Repository<User>
     {
-        public LocalDbContext DbContext { get; }
+        private readonly LocalDbContext _context;
 
-        public UserRepository(LocalDbContext dbContext)
+        public UserRepository(LocalDbContext context) : base(context)
         {
-            DbContext = dbContext;
+            _context = context;
         }
-
-        public User FindByUserName(string userName)
+        public async Task<User?> FindUser(LoginDto loginDto)
         {
-            return DbContext.Users.Where(user => user.UserName == userName)
-                                  .FirstOrDefault();
-        }
-
-        public async Task<List<User>> FindAll()
-        {
-            return await DbContext.Users.ToListAsync();
-        }
-
-        public void Add(User user)
-        {
-        }
-
-        public User FindById(int id)
-        {
-            return null;
+            return await _context.Users.FirstOrDefaultAsync(user => user.UserName == loginDto.Username && user.Password == loginDto.Password);
         }
     }
 }

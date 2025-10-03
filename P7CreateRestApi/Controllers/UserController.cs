@@ -1,85 +1,81 @@
+using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Domain;
-using P7CreateRestApi.Repositories;
+using P7CreateRestApi.Dto;
+using P7CreateRestApi.Services;
+using P7CreateRestApi.SwaggerConfig;
 
 namespace P7CreateRestApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/users")]
+    [Authorize(Roles = "Admin")]
+    
     public class UserController : ControllerBase
     {
-        private UserRepository _userRepository;
+        private readonly IUserService _service;
 
-        public UserController(UserRepository userRepository)
+        public UserController(IUserService service)
         {
-            _userRepository = userRepository;
+            _service = service;
         }
 
         [HttpGet]
-        [Route("list")]
-        public IActionResult Home()
+        [SwaggerDocumentation("user", (int)CrudType.GetAll)]
+        public async Task<IActionResult> ListAllUsers()
         {
-            return Ok();
+            var users = await _service.GetAllAsync();
+            if (users == null)
+                return NotFound(); //404
+            else
+                return Ok(users); //200
         }
 
-        [HttpGet]
-        [Route("add")]
-        public IActionResult AddUser([FromBody]User user)
-        {
-            return Ok();
-        }
+        [HttpGet("{user_id}")]
+        [SwaggerDocumentation("user", (int)CrudType.GetById)]
 
-        [HttpGet]
-        [Route("validate")]
-        public IActionResult Validate([FromBody]User user)
+        public async Task<IActionResult> GetUser(int user_id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-           
-           _userRepository.Add(user);
+            var user = await _service.GetByIdAsync(user_id);
 
-            return Ok();
-        }
-
-        [HttpGet]
-        [Route("update/{id}")]
-        public IActionResult ShowUpdateForm(int id)
-        {
-            User user = _userRepository.FindById(id);
-            
             if (user == null)
-                throw new ArgumentException("Invalid user Id:" + id);
-
-            return Ok();
+                return NotFound(); //404
+            else
+                return Ok(user); //200
         }
 
         [HttpPost]
-        [Route("update/{id}")]
-        public IActionResult UpdateUser(int id, [FromBody] User user)
+        [SwaggerDocumentation("user", (int)CrudType.Create)]
+        public async Task<IActionResult> CreateUser([FromBody] UserDto userDto)
         {
-            // TODO: check required fields, if valid call service to update Trade and return Trade list
-            return Ok();
+            var created = await _service.CreateAsync(userDto);
+
+            return CreatedAtAction(nameof(CreateUser), new { id = created.Id }, created); //201
         }
 
-        [HttpDelete]
-        [Route("{id}")]
-        public IActionResult DeleteUser(int id)
+        [HttpPut("{user_id}")]
+        [SwaggerDocumentation("user", (int)CrudType.Update)]
+        public async Task<IActionResult> UpdateUser(int user_id, [FromBody] UserDto userDto)
         {
-            User user = _userRepository.FindById(id);
-            
-            if (user == null)
-                throw new ArgumentException("Invalid user Id:" + id);
+            var updated = await _service.UpdateAsync(user_id, userDto);
 
-            return Ok();
+            if (updated == null)
+                return NotFound(); //404
+            else
+                return NoContent(); //204
         }
 
-        [HttpGet]
-        [Route("/secure/article-details")]
-        public async Task<ActionResult<List<User>>> GetAllUserArticles()
+        [HttpDelete("{user_id}")]
+        [SwaggerDocumentation("user", (int)CrudType.Delete)]
+        public async Task<IActionResult> DeleteUser(int user_id)
         {
-            return Ok();
+            var hasBeenDeleted = await _service.DeleteAsync(user_id);
+            if (hasBeenDeleted == false)
+                return NotFound(); //404
+            else
+                return NoContent(); //204
         }
     }
 }
