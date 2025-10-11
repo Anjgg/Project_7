@@ -1,11 +1,6 @@
 ﻿namespace P7CreateRestApi.Dto
 {
-    public class UserDto
-    {
-        public int Id { get; set; }
-        public string UserName { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-        public string FullName { get; set; } = string.Empty;
-        public string Role { get; set; } = string.Empty;
-    }
+    public record CreateUserDto(string email, string password, string? role);
+    public record UserDto(string id, string email, IList<string> roles);
+    public record class UpdateUserDto(string? email, string? password, string? role);
 }
