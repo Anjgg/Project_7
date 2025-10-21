@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Domain;
 using P7CreateRestApi.Dto;
@@ -11,7 +12,7 @@ namespace P7CreateRestApi.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/users")]
-    [Authorize(Roles = "Admin")]
+    
     
     public class UserController : ControllerBase
     {
@@ -24,9 +25,9 @@ namespace P7CreateRestApi.Controllers
 
         [HttpGet]
         [SwaggerDocumentation("user", (int)CrudType.GetAll)]
-        public async Task<IActionResult> ListAllUsers()
+        public IActionResult ListAllUsers()
         {
-            var users = await _service.GetAllAsync();
+            var users = _service.GetAllUsers();
             if (users == null)
                 return NotFound(); //404
             else
@@ -36,7 +37,7 @@ namespace P7CreateRestApi.Controllers
         [HttpGet("{user_id}")]
         [SwaggerDocumentation("user", (int)CrudType.GetById)]
 
-        public async Task<IActionResult> GetUser(int user_id)
+        public async Task<IActionResult> GetUser(string user_id)
         {
             var user = await _service.GetByIdAsync(user_id);
 
@@ -48,34 +49,42 @@ namespace P7CreateRestApi.Controllers
 
         [HttpPost]
         [SwaggerDocumentation("user", (int)CrudType.Create)]
-        public async Task<IActionResult> CreateUser([FromBody] UserDto userDto)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto userDto)
         {
-            var created = await _service.CreateAsync(userDto);
+            var (hasBeenCreated, errors) = await _service.CreateAsync(userDto);
+            if (hasBeenCreated is true)
+                return CreatedAtAction(nameof(CreateUser), new { Message = "User has been created" }); //201
+            else
+                return BadRequest(new { Errors = errors }); //400
 
-            return CreatedAtAction(nameof(CreateUser), new { id = created.Id }, created); //201
         }
 
         [HttpPut("{user_id}")]
         [SwaggerDocumentation("user", (int)CrudType.Update)]
-        public async Task<IActionResult> UpdateUser(int user_id, [FromBody] UserDto userDto)
+        public async Task<IActionResult> UpdateUser(string user_id, [FromBody] UpdateUserDto userDto)
         {
-            var updated = await _service.UpdateAsync(user_id, userDto);
+            var (hasBeenUdpated, errors) = await _service.UpdateAsync(user_id, userDto);
 
-            if (updated == null)
-                return NotFound(); //404
-            else
+            if (hasBeenUdpated is true)
                 return NoContent(); //204
+            else if (errors!.Contains("User not found"))
+                return NotFound(); //404
+            else 
+                return BadRequest(new { Errors = errors }); //400
+
         }
 
         [HttpDelete("{user_id}")]
         [SwaggerDocumentation("user", (int)CrudType.Delete)]
-        public async Task<IActionResult> DeleteUser(int user_id)
+        public async Task<IActionResult> DeleteUser(string user_id)
         {
-            var hasBeenDeleted = await _service.DeleteAsync(user_id);
-            if (hasBeenDeleted == false)
+            var (hasBeenDeleted, errors) = await _service.DeleteAsync(user_id);
+            if (hasBeenDeleted is true)
+                return NoContent(); //204
+            else if (errors!.Contains("User not found"))
                 return NotFound(); //404
             else
-                return NoContent(); //204
+                return BadRequest(new { Errors = errors }); //400
         }
     }
 }

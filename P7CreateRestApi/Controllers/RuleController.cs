@@ -34,7 +34,7 @@ namespace P7CreateRestApi.Controllers
         [SwaggerDocumentation("rule", (int)CrudType.GetById)]
         public async Task<IActionResult> GetRule(int rule_id)
         {
-            var rule = _service.GetByIdAsync(rule_id);
+            var rule = await _service.GetByIdAsync(rule_id);
             if (rule == null)
                 return NotFound(); //404
             else
@@ -60,11 +60,11 @@ namespace P7CreateRestApi.Controllers
                 return Ok(updated); //200
         }
 
-        [HttpDelete]
+        [HttpDelete("{rule_id}")]
         [SwaggerDocumentation("rule", (int)CrudType.Delete)]
-        public async Task<IActionResult> DeleteRule(int id)
+        public async Task<IActionResult> DeleteRule(int rule_id)
         {
-            var deleted = await _service.DeleteAsync(id);
+            var deleted = await _service.DeleteAsync(rule_id);
             if (deleted)
                 return NoContent(); //204
             else

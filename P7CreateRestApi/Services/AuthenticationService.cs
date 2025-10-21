@@ -1,4 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using NuGet.Packaging;
 using P7CreateRestApi.Domain;
 using P7CreateRestApi.Dto;
 using P7CreateRestApi.Repositories;
@@ -11,51 +13,56 @@ namespace P7CreateRestApi.Services
 {
     public interface IAuthenticationService
     {
-        public Task<string?> GetJwtToken(LoginDto loginDto);
+        public (string token, DateTime expiration) GenerateJwtToken(User user, List<string> roles);
     }
 
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IConfiguration _configuration;
-        private readonly UserRepository _repository;
+        private readonly JwtOptions _opts;
 
-        public AuthenticationService(IConfiguration configuration, UserRepository repository)
+        public AuthenticationService(IOptions<JwtOptions> opts)
         {
-            _configuration = configuration;
-            _repository = repository;
+            _opts = opts.Value;
         }
 
-        public async Task<string?> GetJwtToken(LoginDto loginDto)
+        public (string token, DateTime expiration) GenerateJwtToken(User user, List<string> roles)
         {
-            var user = await _repository.FindUser(loginDto);
-            
-            if (user is null)
-                return null;
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_opts.Key));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var token = GenerateJwtToken(user);
-            return token;
-        }
-
-        private string GenerateJwtToken(User user)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("Jwt:Key")!));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            var claims = new[]
+            var claims = new List<Claim>
             {
-            new Claim(ClaimTypes.Name, user.UserName),
-            new Claim(ClaimTypes.Role, user.Role)
-        };
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            };
+
+            var expires = DateTime.UtcNow.AddMinutes(_opts.ExpiryMinutes);
 
             var token = new JwtSecurityToken(
-                issuer: _configuration.GetValue<string>("Jwt:Issuer")!,
-                audience: _configuration.GetValue<string>("Jwt:Audience")!,
+                issuer: _opts.Issuer,
+                audience: _opts.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: expires,
                 signingCredentials: credentials
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return (tokenString, expires);
         }
+    }
+
+    public class JwtOptions
+    {
+        public string Key { get; set; } = null!;
+        public string Issuer { get; set; } = null!;
+        public string Audience { get; set; } = null!;
+        public int ExpiryMinutes { get; set; }
     }
 }

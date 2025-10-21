@@ -1,84 +1,125 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using P7CreateRestApi.Domain;
 using P7CreateRestApi.Dto;
 using P7CreateRestApi.Repositories;
+using System.Configuration;
 
 namespace P7CreateRestApi.Services
 {
     public interface IUserService
     {
-        Task<UserDto> CreateAsync(UserDto userDto);
-        Task<bool> DeleteAsync(int id);
-        Task<List<UserDto>> GetAllAsync();
-        Task<UserDto?> GetByIdAsync(int id);
-        Task<UserDto?> UpdateAsync(int id, UserDto user);
+        Task<(bool, List<string>?)> CreateAsync(CreateUserDto userDto);
+        Task<(bool, List<string>?)> DeleteAsync(string id);
+        List<UserDto> GetAllUsers();
+        Task<UserDto?> GetByIdAsync(string id);
+        Task<(bool, List<string>?)> UpdateAsync(string id, UpdateUserDto user);
     }
 
     public class UserService : IUserService
     {
-        private readonly UserRepository _repository;
-        private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(UserRepository repository, IMapper mapper)
+        public UserService(UserManager<User> userManager, ILogger<UserService> logger)
         {
-            _repository = repository;
-            _mapper = mapper;
+            _userManager = userManager;
+            _logger = logger;
         }
 
-        public async Task<UserDto> CreateAsync(UserDto userDto)
+        public async Task<(bool, List<string>?)> CreateAsync(CreateUserDto userDto)
         {
-            var user = _mapper.Map<User>(userDto);
+            var user = new User
+            {
+                UserName = userDto.email,
+                Email = userDto.email,
+            };
 
-            var created = await _repository.AddAsync(user);
+            var createdUser = await _userManager.CreateAsync(user, userDto.password);
+            if (!createdUser.Succeeded)
+            {
+                var errors = createdUser.Errors.Select(e => e.Description).ToList();
+                return (false, errors);
+            }
+            var role = string.IsNullOrEmpty(userDto.role) ? "DefaultUser" : userDto.role;
+            if (!await _userManager.IsInRoleAsync(user, role))
+                await _userManager.AddToRoleAsync(user, role);
 
-            return _mapper.Map<UserDto>(created);
+            return (true, null);
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<(bool, List<string>?)> DeleteAsync(string id)
         {
-            var existingUser = await _repository.GetByIdAsync(id);
+            var existingUser = await _userManager.FindByIdAsync(id);
             if (existingUser != null)
             {
-                _repository.Remove(existingUser);
-                await _repository.SaveChangesAsync();
-                return true;
+                var deletedTask = await _userManager.DeleteAsync(existingUser);
+                if (!deletedTask.Succeeded)
+                {
+                    var errors = deletedTask.Errors.Select(e => e.Description).ToList();
+                    return (false, errors);
+                }
+                return (true, null);
             }
-            return false;
+            return (false, new List<string>() { "User not found" });
         }
 
-        public async Task<List<UserDto>> GetAllAsync()
+        public List<UserDto> GetAllUsers()
         {
-            return await _repository.GetAllAsync()
-                                    .ContinueWith(task => task.Result
-                                    .Select(user => _mapper.Map<UserDto>(user))
-                                    .ToList());
+            return _userManager.Users
+                .Select(user => new UserDto(
+                    user.Id.ToString(),
+                    user.Email ?? string.Empty,
+                    _userManager.GetRolesAsync(user).Result.ToList()
+                )).ToList();
+                
         }
 
-        public async Task<UserDto?> GetByIdAsync(int id)
+        public async Task<UserDto?> GetByIdAsync(string id)
         {
-            var user = await _repository.GetByIdAsync(id);
-
+            var user = await _userManager.FindByIdAsync(id);
+            
             if (user == null)
                 return null;
             else
-                return _mapper.Map<UserDto>(user);
+                return new UserDto(id, user.Email ?? string.Empty, await _userManager.GetRolesAsync(user));
+
         }
 
-        public async Task<UserDto?> UpdateAsync(int id, UserDto userDto)
+        public async Task<(bool, List<string>?)> UpdateAsync(string id, UpdateUserDto updateUserDto)
         {
-            var existingUser = await _repository.GetByIdAsync(id);
+            var existingUser = await _userManager.FindByIdAsync(id);
             if (existingUser == null)
             {
-                return null;
+                return (false, new List<string> { "User not found" });
+            }
+            if (!string.IsNullOrEmpty(updateUserDto.email))
+            {
+                existingUser.Email = updateUserDto.email;
+                existingUser.UserName = updateUserDto.email;
             }
 
-            userDto.Id = id; // Ensure the ID is set correctly
-
-            _mapper.Map(userDto, existingUser);
-
-            var updated = await _repository.UpdateAsync(existingUser);
-
-            return _mapper.Map<UserDto>(updated);
+            if (!string.IsNullOrEmpty(updateUserDto.password))
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(existingUser);
+                var passwordResult = await _userManager.ResetPasswordAsync(existingUser, token, updateUserDto.password);
+                if (!passwordResult.Succeeded)
+                {
+                    var errors = passwordResult.Errors.Select(e => e.Description).ToList();
+                    return (false , errors);
+                }
+            }
+            var currentRoles = await _userManager.GetRolesAsync(existingUser);
+            if (!string.IsNullOrEmpty(updateUserDto.role) && !currentRoles.Contains(updateUserDto.role))
+            {
+                if (currentRoles.Count > 0)
+                {
+                    await _userManager.RemoveFromRolesAsync(existingUser, currentRoles);
+                }
+                await _userManager.AddToRoleAsync(existingUser, updateUserDto.role);
+            }
+            return (true, null);
         }
     }
 }
