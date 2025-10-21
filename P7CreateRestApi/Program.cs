@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using P7CreateRestApi;
+using P7CreateRestApi.Config;
 using P7CreateRestApi.Data;
 using P7CreateRestApi.Domain;
 using P7CreateRestApi.Dto;
@@ -117,7 +118,6 @@ builder.Services.AddAuthorization();
 /* -------------------------------
  * ---- Swagger Configuration ----
  * ------------------------------- */
-// Configure Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -165,8 +165,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
+
+
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<UserLoggingMiddleware>();
+
+
 app.MapControllers();
 
 app.Run();

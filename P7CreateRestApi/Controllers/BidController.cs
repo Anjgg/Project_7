@@ -49,15 +49,24 @@ namespace P7CreateRestApi.Controllers
         [SwaggerDocumentation("bid", (int)CrudType.Create)]
         public async Task<IActionResult> CreateBid([FromBody] BidDto bidDto)
         {
+            if (ModelState.IsValid == false)
+                return BadRequest(); //400
+
             var created = await _service.CreateAsync(bidDto);
 
-            return CreatedAtAction(nameof(CreateBid), new { id = created.Id }, created); //201
+            if (created == null)
+                return Problem("Error while creating bid", statusCode: 500); //500
+            else
+                return CreatedAtAction(nameof(CreateBid), new { id = created.Id }, created); //201
         }
 
         [HttpPut("{bid_id}")]
         [SwaggerDocumentation("bid", (int)CrudType.Update)]
         public async Task<IActionResult> UpdateBid(int bid_id, [FromBody] BidDto bidDto)
         {
+            if (ModelState.IsValid == false)
+                return BadRequest(); //400
+
             var updated = await _service.UpdateAsync(bid_id, bidDto);
 
             if (updated == null)
@@ -71,6 +80,7 @@ namespace P7CreateRestApi.Controllers
         public async Task<IActionResult> DeleteBid(int bid_id)
         {
             var hasBeenDeleted = await _service.DeleteAsync(bid_id);
+
             if (hasBeenDeleted == false)
                 return NotFound(); //404
             else

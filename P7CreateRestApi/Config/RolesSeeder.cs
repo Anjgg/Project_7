@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace P7CreateRestApi;
+namespace P7CreateRestApi.Config;
 
 public static class RolesSeeder
 {

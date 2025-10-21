@@ -78,11 +78,13 @@ namespace P7CreateRestApi.Controllers
         [SwaggerDocumentation("user", (int)CrudType.Delete)]
         public async Task<IActionResult> DeleteUser(string user_id)
         {
-            var hasBeenDeleted = await _service.DeleteAsync(user_id);
+            var (hasBeenDeleted, errors) = await _service.DeleteAsync(user_id);
             if (hasBeenDeleted is true)
                 return NoContent(); //204
-            else
+            else if (errors!.Contains("User not found"))
                 return NotFound(); //404
+            else
+                return BadRequest(new { Errors = errors }); //400
         }
     }
 }

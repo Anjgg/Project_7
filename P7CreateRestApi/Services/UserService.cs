@@ -4,13 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using P7CreateRestApi.Domain;
 using P7CreateRestApi.Dto;
 using P7CreateRestApi.Repositories;
+using System.Configuration;
 
 namespace P7CreateRestApi.Services
 {
     public interface IUserService
     {
         Task<(bool, List<string>?)> CreateAsync(CreateUserDto userDto);
-        Task<bool> DeleteAsync(string id);
+        Task<(bool, List<string>?)> DeleteAsync(string id);
         List<UserDto> GetAllUsers();
         Task<UserDto?> GetByIdAsync(string id);
         Task<(bool, List<string>?)> UpdateAsync(string id, UpdateUserDto user);
@@ -19,10 +20,12 @@ namespace P7CreateRestApi.Services
     public class UserService : IUserService
     {
         private readonly UserManager<User> _userManager;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(UserManager<User> userManager)
+        public UserService(UserManager<User> userManager, ILogger<UserService> logger)
         {
             _userManager = userManager;
+            _logger = logger;
         }
 
         public async Task<(bool, List<string>?)> CreateAsync(CreateUserDto userDto)
@@ -46,15 +49,20 @@ namespace P7CreateRestApi.Services
             return (true, null);
         }
 
-        public async Task<bool> DeleteAsync(string id)
+        public async Task<(bool, List<string>?)> DeleteAsync(string id)
         {
             var existingUser = await _userManager.FindByIdAsync(id);
             if (existingUser != null)
             {
-                await _userManager.DeleteAsync(existingUser);
-                return true;
+                var deletedTask = await _userManager.DeleteAsync(existingUser);
+                if (!deletedTask.Succeeded)
+                {
+                    var errors = deletedTask.Errors.Select(e => e.Description).ToList();
+                    return (false, errors);
+                }
+                return (true, null);
             }
-            return false;
+            return (false, new List<string>() { "User not found" });
         }
 
         public List<UserDto> GetAllUsers()
