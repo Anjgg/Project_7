@@ -11,7 +11,7 @@ namespace P7CreateRestApi.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/bids")]
     [Authorize]
-    
+
     public class BidController : ControllerBase
     {
         private readonly IBidService _service;

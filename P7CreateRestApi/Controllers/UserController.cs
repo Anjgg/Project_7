@@ -1,8 +1,5 @@
 using Asp.Versioning;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using P7CreateRestApi.Domain;
 using P7CreateRestApi.Dto;
 using P7CreateRestApi.Services;
 using P7CreateRestApi.SwaggerConfig;
@@ -12,8 +9,8 @@ namespace P7CreateRestApi.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/users")]
-    
-    
+
+
     public class UserController : ControllerBase
     {
         private readonly IUserService _service;
@@ -69,7 +66,7 @@ namespace P7CreateRestApi.Controllers
                 return NoContent(); //204
             else if (errors!.Contains("User not found"))
                 return NotFound(); //404
-            else 
+            else
                 return BadRequest(new { Errors = errors }); //400
 
         }

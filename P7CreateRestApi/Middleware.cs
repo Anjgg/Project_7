@@ -18,19 +18,21 @@ public class UserLoggingMiddleware
     {
         string? userId = null;
         string? userEmail = null;
+        string? userRole = null;
 
         if (context.User.Identity?.IsAuthenticated == true)
         {
             userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier)
                      ?? context.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
             userEmail = context.User.FindFirstValue(ClaimTypes.Email);
+            userRole = context.User.FindFirstValue(ClaimTypes.Role);
         }
 
         var method = context.Request.Method;
         var path = context.Request.Path;
 
-        _logger.LogInformation("Request {Method} {Path} by UserId={UserId} Email={Email}",
-            method, path, userId ?? "Anonymous", userEmail ?? "N/A");
+        _logger.LogInformation("Request {Method} {Path} by UserId={UserId} Email={Email} Role= {Role}",
+            method, path, userId ?? "Anonymous", userEmail ?? "N/A", userRole);
 
         await _next(context);
     }

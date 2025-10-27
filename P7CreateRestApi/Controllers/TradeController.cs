@@ -1,6 +1,5 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using P7CreateRestApi.Domain;
 using P7CreateRestApi.Dto;
 using P7CreateRestApi.Services;
 using P7CreateRestApi.SwaggerConfig;
@@ -43,7 +42,7 @@ namespace P7CreateRestApi.Controllers
 
         [HttpPost]
         [SwaggerDocumentation("trade", (int)CrudType.Create)]
-        public async Task<IActionResult> CreateTrade([FromBody]TradeDto tradeDto)
+        public async Task<IActionResult> CreateTrade([FromBody] TradeDto tradeDto)
         {
             var created = await _service.CreateAsync(tradeDto);
             return CreatedAtAction(nameof(CreateTrade), new { id = created.Id }, created); //201

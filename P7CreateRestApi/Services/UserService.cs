@@ -1,10 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
 using P7CreateRestApi.Domain;
 using P7CreateRestApi.Dto;
-using P7CreateRestApi.Repositories;
-using System.Configuration;
 
 namespace P7CreateRestApi.Services
 {
@@ -73,13 +69,13 @@ namespace P7CreateRestApi.Services
                     user.Email ?? string.Empty,
                     _userManager.GetRolesAsync(user).Result.ToList()
                 )).ToList();
-                
+
         }
 
         public async Task<UserDto?> GetByIdAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            
+
             if (user == null)
                 return null;
             else
@@ -107,7 +103,7 @@ namespace P7CreateRestApi.Services
                 if (!passwordResult.Succeeded)
                 {
                     var errors = passwordResult.Errors.Select(e => e.Description).ToList();
-                    return (false , errors);
+                    return (false, errors);
                 }
             }
             var currentRoles = await _userManager.GetRolesAsync(existingUser);

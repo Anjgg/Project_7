@@ -45,7 +45,7 @@ namespace P7CreateRestApi.Controllers
 
         [HttpPost]
         [SwaggerDocumentation("curve point", (int)CrudType.Create)]
-        public async Task<IActionResult> CreateCurvePoint([FromBody]CurvePointDto curvePoint)
+        public async Task<IActionResult> CreateCurvePoint([FromBody] CurvePointDto curvePoint)
         {
             var created = await _service.CreateAsync(curvePoint);
 

@@ -16,7 +16,7 @@ namespace P7CreateRestApi.Repositories
     }
 
 
-    public class Repository<T> :  IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
         private readonly LocalDbContext _context;
         private readonly DbSet<T> _dbSet;
@@ -46,7 +46,7 @@ namespace P7CreateRestApi.Repositories
         public void Remove(T entity) =>
             _dbSet.Remove(entity);
 
-        public async Task<T> UpdateAsync(T entity) 
+        public async Task<T> UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
             await SaveChangesAsync();

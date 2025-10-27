@@ -11,7 +11,6 @@ using P7CreateRestApi.Dto;
 using P7CreateRestApi.Repositories;
 using P7CreateRestApi.Services;
 using P7CreateRestApi.SwaggerConfig;
-using System;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -55,7 +54,7 @@ builder.Services.AddApiVersioning(config =>
 .AddApiExplorer(options =>
 {
     options.GroupNameFormat = "'v'V";
-    options.SubstituteApiVersionInUrl = true;   
+    options.SubstituteApiVersionInUrl = true;
 });
 
 
@@ -66,7 +65,7 @@ builder.Services.AddAutoMapper(config =>
 {
     config.CreateMap<Bid, BidDto>().ReverseMap();
     config.CreateMap<CurvePoint, CurvePointDto>().ReverseMap();
-    config.CreateMap<Rating,RatingDto>().ReverseMap();
+    config.CreateMap<Rating, RatingDto>().ReverseMap();
     config.CreateMap<Rule, RuleDto>().ReverseMap();
     config.CreateMap<Trade, TradeDto>().ReverseMap();
 }, typeof(Program));

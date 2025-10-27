@@ -37,7 +37,7 @@ namespace P7CreateRestApi.Services
         public async Task<RatingDto?> GetByIdAsync(int id)
         {
             var rating = await _repository.GetByIdAsync(id);
-            
+
             if (rating == null)
                 return null;
             else

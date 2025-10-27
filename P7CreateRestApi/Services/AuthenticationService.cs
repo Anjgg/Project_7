@@ -1,13 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using NuGet.Packaging;
 using P7CreateRestApi.Domain;
-using P7CreateRestApi.Dto;
-using P7CreateRestApi.Repositories;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace P7CreateRestApi.Services
 {
@@ -40,7 +36,8 @@ namespace P7CreateRestApi.Services
             foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
-            };
+            }
+            ;
 
             var expires = DateTime.UtcNow.AddMinutes(_opts.ExpiryMinutes);
 

@@ -21,6 +21,6 @@ namespace P7CreateRestApi.Domain
         public string DealName { get; set; } = string.Empty;
         public string DealType { get; set; } = string.Empty;
         public string SourceListId { get; set; } = string.Empty;
-        public string Side { get; set; } = string.Empty;  
+        public string Side { get; set; } = string.Empty;
     }
 }

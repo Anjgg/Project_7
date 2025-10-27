@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using P7CreateRestApi.Domain;
 using P7CreateRestApi.Dto;
 using P7CreateRestApi.Services;
-using P7CreateRestApi.SwaggerConfig;
 
 namespace P7CreateRestApi.Controllers
 {

@@ -1,0 +1,8 @@
+C:\Users\julie\source\repos\Anjgg\Project_7\P7CreateRestApi_Tests\bin\Debug\net8.0\.msCoverageSourceRootsMapping_P7CreateRestApi_Tests
+C:\Users\julie\source\repos\Anjgg\Project_7\P7CreateRestApi_Tests\bin\Debug\net8.0\CoverletSourceRootsMapping_P7CreateRestApi_Tests
+C:\Users\julie\source\repos\Anjgg\Project_7\P7CreateRestApi_Tests\obj\Debug\net8.0\P7CreateRestApi_Tests.csproj.AssemblyReference.cache
+C:\Users\julie\source\repos\Anjgg\Project_7\P7CreateRestApi_Tests\obj\Debug\net8.0\P7CreateRestApi_Tests.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\julie\source\repos\Anjgg\Project_7\P7CreateRestApi_Tests\obj\Debug\net8.0\P7CreateRestApi_Tests.AssemblyInfoInputs.cache
+C:\Users\julie\source\repos\Anjgg\Project_7\P7CreateRestApi_Tests\obj\Debug\net8.0\P7CreateRestApi_Tests.AssemblyInfo.cs
+C:\Users\julie\source\repos\Anjgg\Project_7\P7CreateRestApi_Tests\obj\Debug\net8.0\P7CreateRestApi_Tests.csproj.CoreCompileInputs.cache
+C:\Users\julie\source\repos\Anjgg\Project_7\P7CreateRestApi_Tests\obj\Debug\net8.0\P7CreateRestApi_Tests.sourcelink.json
