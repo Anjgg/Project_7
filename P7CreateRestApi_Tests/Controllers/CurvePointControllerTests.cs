@@ -7,25 +7,24 @@ using P7CreateRestApi.Controllers;
 namespace P7CreateRestApi_Tests.Controllers
 {
     [TestClass]
-    public class BidControllersTests
+    public class CurvePointControllerTests
     {
-
         [TestMethod]
-        public async Task ListAllBids_ReturnOk_WhenListExist()
+        public async Task ListAllCurvePoints_ReturnOk_WhenListExist()
         {
             // Arrange
-            var mockService = new Mock<IBidService>();
+            var mockService = new Mock<ICurvePointService>();
 
             mockService.Setup(service => service.GetAllAsync())
-                       .ReturnsAsync(new List<BidDto>
+                       .ReturnsAsync(new List<CurvePointDto>
                        {
-                           new BidDto { Id = 1, Account = "Account1", Type = "Type1", BidQuantity = 10 },
-                           new BidDto { Id = 2, Account = "Account2", Type = "Type2", BidQuantity = 20 }
+                           new CurvePointDto { Id = 1, CurvePointValue = 12, AsOfDate = DateTime.Now, CreationDate = DateTime.Now, Term = 34 },
+                           new CurvePointDto { Id = 2, CurvePointValue = 56, AsOfDate = DateTime.Now, CreationDate = DateTime.Now, Term = 78 },
                        });
-            var sut = new BidController(mockService.Object);
+            var sut = new CurvePointController(mockService.Object);
 
             // Act
-            var result = await sut.ListAllBids();
+            var result = await sut.ListAllCurvePoint();
 
             // Assert
             Assert.IsNotNull(result);
@@ -34,16 +33,16 @@ namespace P7CreateRestApi_Tests.Controllers
         }
 
         [TestMethod]
-        public async Task ListAllBids_ReturnNotFound_WhenListDoesNotExist()
+        public async Task ListAllCurvePoint_ReturnNotFound_WhenListDoesNotExist()
         {
             // Arrange
-            var mockService = new Mock<IBidService>();
+            var mockService = new Mock<ICurvePointService>();
             mockService.Setup(service => service.GetAllAsync())!
-                       .ReturnsAsync((List<BidDto>?)null);
-            var sut = new BidController(mockService.Object);
+                       .ReturnsAsync((List<CurvePointDto>?)null);
+            var sut = new CurvePointController(mockService.Object);
 
             // Act
-            var result = await sut.ListAllBids();
+            var result = await sut.ListAllCurvePoint();
 
             // Assert
             Assert.IsNotNull(result);
@@ -51,17 +50,17 @@ namespace P7CreateRestApi_Tests.Controllers
         }
 
         [TestMethod]
-        public async Task GetBid_ReturnOk_WhenBidExists()
+        public async Task GetCurvePoint_ReturnOk_WhenBidExists()
         {
             // Arrange
-            var mockService = new Mock<IBidService>();
-            int bidId = 1;
-            mockService.Setup(service => service.GetByIdAsync(bidId))
-                       .ReturnsAsync(new BidDto { Id = bidId, Account = "Account1", Type = "Type1", BidQuantity = 10 });
-            var sut = new BidController(mockService.Object);
+            var mockService = new Mock<ICurvePointService>();
+            int curvePointId = 1;
+            mockService.Setup(service => service.GetByIdAsync(curvePointId))
+                       .ReturnsAsync(new CurvePointDto { Id = curvePointId, CurvePointValue = 56, AsOfDate = DateTime.Now, CreationDate = DateTime.Now, Term = 78 });
+            var sut = new CurvePointController(mockService.Object);
 
             // Act
-            var result = await sut.GetBid(bidId);
+            var result = await sut.GetCurvePoint(curvePointId);
 
             // Assert
             Assert.IsNotNull(result);
@@ -234,4 +233,7 @@ namespace P7CreateRestApi_Tests.Controllers
         }
     }
 }
+
+
+
 

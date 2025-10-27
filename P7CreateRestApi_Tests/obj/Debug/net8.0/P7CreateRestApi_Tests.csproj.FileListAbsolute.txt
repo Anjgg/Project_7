@@ -418,5 +418,3 @@ C:\Users\julie\source\repos\Anjgg\Project_7\P7CreateRestApi_Tests\obj\Debug\net8
 C:\Users\julie\source\repos\Anjgg\Project_7\P7CreateRestApi_Tests\obj\Debug\net8.0\P7CreateRestApi_Tests.pdb
 C:\Users\julie\source\repos\Anjgg\Project_7\P7CreateRestApi_Tests\obj\Debug\net8.0\P7CreateRestApi_Tests.genruntimeconfig.cache
 C:\Users\julie\source\repos\Anjgg\Project_7\P7CreateRestApi_Tests\obj\Debug\net8.0\ref\P7CreateRestApi_Tests.dll
-C:\Users\julie\source\repos\Anjgg\Project_7\P7CreateRestApi_Tests\bin\Debug\net8.0\fr\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.resources.dll
-C:\Users\julie\source\repos\Anjgg\Project_7\P7CreateRestApi_Tests\bin\Debug\net8.0\fr\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.resources.dll
