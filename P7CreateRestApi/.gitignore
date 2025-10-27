@@ -18,6 +18,11 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+*.dll
+*.exe
+*.pdb
+*.cache
 
+# OS generated files
 /bin/**
 /obj/**

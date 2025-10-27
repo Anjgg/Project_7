@@ -2,11 +2,13 @@
 using Moq;
 using P7CreateRestApi.Dto;
 using P7CreateRestApi.Services;
+using P7CreateRestApi.Controllers;
+using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace P7CreateRestApi_Tests.BidController
+namespace P7CreateRestApi_Tests.Controllers
 {
     [TestClass]
-    public class BidControllerTests
+    public class BidControllersTests
     {
 
         [TestMethod]
@@ -212,6 +214,24 @@ namespace P7CreateRestApi_Tests.BidController
             // Assert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+        }
+
+        [TestMethod]
+        public async Task CreateBid_ReturnObjectResult_WhenProblemInCreation()
+        {
+            // Arrange
+            var mockService = new Mock<IBidService>();
+            var bidDto = new BidDto { Account = "Account1", Type = "Type1", BidQuantity = 10 };
+            mockService.Setup(service => service.CreateAsync(bidDto))
+                       .ReturnsAsync((BidDto?)null);
+            var sut = new BidController(mockService.Object);
+            // Act
+            var result = await sut.CreateBid(bidDto);
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = result as ObjectResult;
+            Assert.AreEqual(500, objectResult?.StatusCode);
         }
     }
 }
