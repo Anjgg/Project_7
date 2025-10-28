@@ -57,7 +57,7 @@ namespace P7CreateRestApi.Controllers
             if (updated == null)
                 return NotFound(); //404
             else
-                return Ok(updated); //200
+                return NoContent(); //200
         }
 
         [HttpDelete("{rule_id}")]
