@@ -28,6 +28,7 @@ yarn-error.log*
 # OS generated files
 /bin/**
 /obj/**
+**/obj/
 .vs/**
 
 **/TestResults/
