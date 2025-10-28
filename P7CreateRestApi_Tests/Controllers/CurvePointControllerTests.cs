@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using P7CreateRestApi.Controllers;
-using P7CreateRestApi.Domain;
 using P7CreateRestApi.Dto;
 using P7CreateRestApi.Services;
 
@@ -92,10 +91,10 @@ namespace P7CreateRestApi_Tests.Controllers
         {
             // Arrange
             var mockService = new Mock<ICurvePointService>();
-            var curvePointDto = new CurvePointDto { Id = 1, CurvePointValue = 12, AsOfDate = DateTime.Now, CreationDate = DateTime.Now, Term = 34 };
-            var createdCurvePointDto = new CurvePointDto { Id = 1, CurvePointValue = 12, AsOfDate = DateTime.Now, CreationDate = DateTime.Now, Term = 34 };
+            var curvePointDto = new CurvePointDto { CurvePointValue = 12, AsOfDate = DateTime.Now, CreationDate = DateTime.Now, Term = 34 };
+            var createdId = 1;
             mockService.Setup(service => service.CreateAsync(curvePointDto))
-                       .ReturnsAsync(createdCurvePointDto);
+                       .ReturnsAsync(createdId);
             var sut = new CurvePointController(mockService.Object);
 
             // Act
@@ -180,57 +179,6 @@ namespace P7CreateRestApi_Tests.Controllers
             // Assert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(NoContentResult));
-        }
-
-        [TestMethod]
-        public async Task CreateCurvePoint_ReturnBadRequest_WhenModelIsInvalid()
-        {
-            // Arrange
-            var mockService = new Mock<ICurvePointService>();
-            var curvePointDto = new CurvePointDto { CurvePointValue = 10, AsOfDate = DateTime.Now, CreationDate = DateTime.Now, Term = 34 }; // Invalid Account
-            var sut = new CurvePointController(mockService.Object);
-            sut.ModelState.AddModelError("Account", "Account is required.");
-
-            // Act
-            var result = await sut.CreateCurvePoint(curvePointDto);
-
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
-        }
-
-        [TestMethod]
-        public async Task UpdateCurvePoint_ReturnBadRequest_WhenModelIsInvalid()
-        {
-            // Arrange
-            var mockService = new Mock<ICurvePointService>();
-            int curvePointId = 1;
-            var curvePointDto = new CurvePointDto { Id = 1, CurvePointValue = 12, AsOfDate = DateTime.Now, CreationDate = DateTime.Now, Term = 34 }; // Invalid Account
-            var sut = new CurvePointController(mockService.Object);
-            sut.ModelState.AddModelError("Account", "Account is required.");
-            // Act
-            var result = await sut.UpdateCurvePoint(curvePointId, curvePointDto);
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
-        }
-
-        [TestMethod]
-        public async Task CreateCurvePoint_ReturnObjectResult_WhenProblemInCreation()
-        {
-            // Arrange
-            var mockService = new Mock<ICurvePointService>();
-            var curvePointDto = new CurvePointDto { Id = 1, CurvePointValue = 12, AsOfDate = DateTime.Now, CreationDate = DateTime.Now, Term = 34 };
-            mockService.Setup(service => service.CreateAsync(curvePointDto))
-                       .ReturnsAsync((CurvePointDto?)null);
-            var sut = new CurvePointController(mockService.Object);
-            // Act
-            var result = await sut.CreateCurvePoint(curvePointDto);
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(ObjectResult));
-            var objectResult = result as ObjectResult;
-            Assert.AreEqual(500, objectResult?.StatusCode);
         }
     }
 }

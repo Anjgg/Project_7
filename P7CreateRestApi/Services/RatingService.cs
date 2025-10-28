@@ -9,7 +9,7 @@ namespace P7CreateRestApi.Services
     {
         Task<List<RatingDto>> GetAllAsync();
         Task<RatingDto?> GetByIdAsync(int id);
-        Task<RatingDto> CreateAsync(RatingDto curvePointDto);
+        Task<int> CreateAsync(RatingDto curvePointDto);
         Task<RatingDto?> UpdateAsync(int id, RatingDto curvePointDto);
         Task<bool> DeleteAsync(int id);
     }
@@ -44,13 +44,13 @@ namespace P7CreateRestApi.Services
                 return _mapper.Map<RatingDto>(rating);
         }
 
-        public async Task<RatingDto> CreateAsync(RatingDto ratingDto)
+        public async Task<int> CreateAsync(RatingDto ratingDto)
         {
             var rating = _mapper.Map<Rating>(ratingDto);
 
             var created = await _repository.AddAsync(rating);
 
-            return _mapper.Map<RatingDto>(created);
+            return created.Id;
         }
 
         public async Task<RatingDto?> UpdateAsync(int id, RatingDto ratingDto)
