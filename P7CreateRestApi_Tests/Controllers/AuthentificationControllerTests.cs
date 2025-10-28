@@ -18,8 +18,8 @@ namespace P7CreateRestApi_Tests.Controllers
             // Arrange
             var loginRequest = new LoginRequest("", "password123");
             var mockService = new Mock<IAuthenticationService>();
-            var mockUserManager = new Mock<UserManager<User>>(Mock.Of<IUserStore<User>>(), null, null, null, null, null, null, null, null);
-            var mockSignInManager = new Mock<SignInManager<User>>(mockUserManager.Object, Mock.Of<IHttpContextAccessor>(), Mock.Of<IUserClaimsPrincipalFactory<User>>(), null, null, null, null);
+            var mockUserManager = new Mock<UserManager<User>>(Mock.Of<IUserStore<User>>(), null!, null!, null!, null!, null!, null!, null!, null!);
+            var mockSignInManager = new Mock<SignInManager<User>>(mockUserManager.Object, Mock.Of<IHttpContextAccessor>(), Mock.Of<IUserClaimsPrincipalFactory<User>>(), null!, null!, null!, null!);
             mockUserManager.Setup(um => um.FindByEmailAsync(loginRequest.email))
                            .ReturnsAsync((User?)null);
             var sut = new AuthentificationController(mockService.Object, mockUserManager.Object, mockSignInManager.Object);
@@ -38,8 +38,8 @@ namespace P7CreateRestApi_Tests.Controllers
             // Arrange
             var loginRequest = new LoginRequest("admin@example.com", "");
             var mockService = new Mock<IAuthenticationService>();
-            var mockUserManager = new Mock<UserManager<User>>(Mock.Of<IUserStore<User>>(), null, null, null, null, null, null, null, null);
-            var mockSignInManager = new Mock<SignInManager<User>>(mockUserManager.Object, Mock.Of<IHttpContextAccessor>(), Mock.Of<IUserClaimsPrincipalFactory<User>>(), null, null, null, null);
+            var mockUserManager = new Mock<UserManager<User>>(Mock.Of<IUserStore<User>>(), null!, null!, null!, null!, null!, null!, null!, null!);
+            var mockSignInManager = new Mock<SignInManager<User>>(mockUserManager.Object, Mock.Of<IHttpContextAccessor>(), Mock.Of<IUserClaimsPrincipalFactory<User>>(), null!, null!, null!, null!);
             mockUserManager.Setup(um => um.FindByEmailAsync(loginRequest.email))
                            .ReturnsAsync(new User { Email = loginRequest.email });
             mockSignInManager.Setup(sm => sm.CheckPasswordSignInAsync(It.IsAny<User>(), loginRequest.password, false))
@@ -60,8 +60,8 @@ namespace P7CreateRestApi_Tests.Controllers
             // Arrange
             var loginRequest = new LoginRequest("admin@example.com", "password123");
             var mockService = new Mock<IAuthenticationService>();
-            var mockUserManager = new Mock<UserManager<User>>(Mock.Of<IUserStore<User>>(), null, null, null, null, null, null, null, null);
-            var mockSignInManager = new Mock<SignInManager<User>>(mockUserManager.Object, Mock.Of<IHttpContextAccessor>(), Mock.Of<IUserClaimsPrincipalFactory<User>>(), null, null, null, null);
+            var mockUserManager = new Mock<UserManager<User>>(Mock.Of<IUserStore<User>>(), null!, null!, null!, null!, null!, null!, null!, null!);
+            var mockSignInManager = new Mock<SignInManager<User>>(mockUserManager.Object, Mock.Of<IHttpContextAccessor>(), Mock.Of<IUserClaimsPrincipalFactory<User>>(), null!, null!, null!, null!);
             var user = new User { Email = loginRequest.email };
             mockUserManager.Setup(um => um.FindByEmailAsync(loginRequest.email))
                            .ReturnsAsync(user);
