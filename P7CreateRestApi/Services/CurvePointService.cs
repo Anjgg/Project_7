@@ -9,7 +9,7 @@ namespace P7CreateRestApi.Services
     {
         Task<List<CurvePointDto>> GetAllAsync();
         Task<CurvePointDto?> GetByIdAsync(int id);
-        Task<CurvePointDto> CreateAsync(CurvePointDto curvePointDto);
+        Task<int> CreateAsync(CurvePointDto curvePointDto);
         Task<CurvePointDto?> UpdateAsync(int id, CurvePointDto curvePointDto);
         Task<bool> DeleteAsync(int id);
     }
@@ -44,13 +44,13 @@ namespace P7CreateRestApi.Services
                 return _mapper.Map<CurvePointDto>(curvePoint);
         }
 
-        public async Task<CurvePointDto> CreateAsync(CurvePointDto curvePointDto)
+        public async Task<int> CreateAsync(CurvePointDto curvePointDto)
         {
             var curvePoint = _mapper.Map<CurvePoint>(curvePointDto);
 
             var created = await _repository.AddAsync(curvePoint);
 
-            return _mapper.Map<CurvePointDto>(curvePoint);
+            return created.Id;
         }
 
         public async Task<CurvePointDto?> UpdateAsync(int id, CurvePointDto curvePointDto)

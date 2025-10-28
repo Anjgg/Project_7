@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
+using P7CreateRestApi.Controllers;
+using P7CreateRestApi.Domain;
 using P7CreateRestApi.Dto;
 using P7CreateRestApi.Services;
-using P7CreateRestApi.Controllers;
 
 namespace P7CreateRestApi_Tests.Controllers
 {
@@ -50,7 +51,7 @@ namespace P7CreateRestApi_Tests.Controllers
         }
 
         [TestMethod]
-        public async Task GetCurvePoint_ReturnOk_WhenBidExists()
+        public async Task GetCurvePoint_ReturnOk_WhenCurvePointExists()
         {
             // Arrange
             var mockService = new Mock<ICurvePointService>();
@@ -69,17 +70,17 @@ namespace P7CreateRestApi_Tests.Controllers
         }
 
         [TestMethod]
-        public async Task GetBid_ReturnNotFound_WhenBidDoesNotExist()
+        public async Task GetCurvePoint_ReturnNotFound_WhenCurvePointDoesNotExist()
         {
             // Arrange
-            var mockService = new Mock<IBidService>();
-            int bidId = 1;
-            mockService.Setup(service => service.GetByIdAsync(bidId))
-                       .ReturnsAsync((BidDto?)null);
-            var sut = new BidController(mockService.Object);
+            var mockService = new Mock<ICurvePointService>();
+            int curvePointId = 1;
+            mockService.Setup(service => service.GetByIdAsync(curvePointId))
+                       .ReturnsAsync((CurvePointDto?)null);
+            var sut = new CurvePointController(mockService.Object);
 
             // Act
-            var result = await sut.GetBid(bidId);
+            var result = await sut.GetCurvePoint(curvePointId);
 
             // Assert
             Assert.IsNotNull(result);
@@ -87,18 +88,18 @@ namespace P7CreateRestApi_Tests.Controllers
         }
 
         [TestMethod]
-        public async Task CreateBid_ReturnCreatedAtActionResult_WhenBidIsCreated()
+        public async Task CreateCurvePoint_ReturnCreatedAtActionResult_WhenCurvePointIsCreated()
         {
             // Arrange
-            var mockService = new Mock<IBidService>();
-            var bidDto = new BidDto { Account = "Account1", Type = "Type1", BidQuantity = 10 };
-            var createdBidDto = new BidDto { Id = 1, Account = "Account1", Type = "Type1", BidQuantity = 10 };
-            mockService.Setup(service => service.CreateAsync(bidDto))
-                       .ReturnsAsync(createdBidDto);
-            var sut = new BidController(mockService.Object);
+            var mockService = new Mock<ICurvePointService>();
+            var curvePointDto = new CurvePointDto { Id = 1, CurvePointValue = 12, AsOfDate = DateTime.Now, CreationDate = DateTime.Now, Term = 34 };
+            var createdCurvePointDto = new CurvePointDto { Id = 1, CurvePointValue = 12, AsOfDate = DateTime.Now, CreationDate = DateTime.Now, Term = 34 };
+            mockService.Setup(service => service.CreateAsync(curvePointDto))
+                       .ReturnsAsync(createdCurvePointDto);
+            var sut = new CurvePointController(mockService.Object);
 
             // Act
-            var result = await sut.CreateBid(bidDto);
+            var result = await sut.CreateCurvePoint(curvePointDto);
 
             // Assert
             Assert.IsNotNull(result);
@@ -107,18 +108,18 @@ namespace P7CreateRestApi_Tests.Controllers
         }
 
         [TestMethod]
-        public async Task UpdateBid_ReturnNotFound_WhenBidDoesNotExist()
+        public async Task UpdateCurvePoint_ReturnNotFound_WhenCurvePointDoesNotExist()
         {
             // Arrange
-            var mockService = new Mock<IBidService>();
-            int bidId = 1;
-            var bidDto = new BidDto { Account = "Account1", Type = "Type1", BidQuantity = 10 };
-            mockService.Setup(service => service.UpdateAsync(bidId, bidDto))
-                       .ReturnsAsync((BidDto?)null);
-            var sut = new BidController(mockService.Object);
+            var mockService = new Mock<ICurvePointService>();
+            int curvePointId = 1;
+            var curvePointDto = new CurvePointDto { Id = 1, CurvePointValue = 12, AsOfDate = DateTime.Now, CreationDate = DateTime.Now, Term = 34 };
+            mockService.Setup(service => service.UpdateAsync(curvePointId, curvePointDto))
+                       .ReturnsAsync((CurvePointDto?)null);
+            var sut = new CurvePointController(mockService.Object);
 
             // Act
-            var result = await sut.UpdateBid(bidId, bidDto);
+            var result = await sut.UpdateCurvePoint(curvePointId, curvePointDto);
 
             // Assert
             Assert.IsNotNull(result);
@@ -126,19 +127,19 @@ namespace P7CreateRestApi_Tests.Controllers
         }
 
         [TestMethod]
-        public async Task UpdateBid_ReturnOk_WhenBidIsUpdated()
+        public async Task UpdateCurvePoint_ReturnOk_WhenCurvePointIsUpdated()
         {
             // Arrange
-            var mockService = new Mock<IBidService>();
-            int bidId = 1;
-            var bidDto = new BidDto { Account = "Account1", Type = "Type1", BidQuantity = 10 };
-            var updatedBidDto = new BidDto { Id = bidId, Account = "Account1Updated", Type = "Type1Updated", BidQuantity = 10 };
-            mockService.Setup(service => service.UpdateAsync(bidId, bidDto))
-                       .ReturnsAsync(updatedBidDto);
-            var sut = new BidController(mockService.Object);
+            var mockService = new Mock<ICurvePointService>();
+            int curvePointId = 1;
+            var curvePointDto = new CurvePointDto { Id = 1, CurvePointValue = 12, AsOfDate = DateTime.Now, CreationDate = DateTime.Now, Term = 34 };
+            var updatedCurvePointDto = new CurvePointDto { Id = 1, CurvePointValue = 45, AsOfDate = DateTime.Now, CreationDate = DateTime.Now, Term = 78 };
+            mockService.Setup(service => service.UpdateAsync(curvePointId, curvePointDto))
+                       .ReturnsAsync(updatedCurvePointDto);
+            var sut = new CurvePointController(mockService.Object);
 
             // Act
-            var result = await sut.UpdateBid(bidId, bidDto);
+            var result = await sut.UpdateCurvePoint(curvePointId, curvePointDto);
 
             // Assert
             Assert.IsNotNull(result);
@@ -146,17 +147,17 @@ namespace P7CreateRestApi_Tests.Controllers
         }
 
         [TestMethod]
-        public async Task DeleteBid_ReturnNotFound_WhenBidDoesNotExist()
+        public async Task DeleteCurvePoint_ReturnNotFound_WhenCurvePointDoesNotExist()
         {
             // Arrange
-            var mockService = new Mock<IBidService>();
-            int bidId = 1;
-            mockService.Setup(service => service.DeleteAsync(bidId))
+            var mockService = new Mock<ICurvePointService>();
+            int curvePointId = 1;
+            mockService.Setup(service => service.DeleteAsync(curvePointId))
                        .ReturnsAsync(false);
-            var sut = new BidController(mockService.Object);
+            var sut = new CurvePointController(mockService.Object);
 
             // Act
-            var result = await sut.DeleteBid(bidId);
+            var result = await sut.DeleteCurvePoint(curvePointId);
 
             // Assert
             Assert.IsNotNull(result);
@@ -164,17 +165,17 @@ namespace P7CreateRestApi_Tests.Controllers
         }
 
         [TestMethod]
-        public async Task DeleteBid_ReturnNoContent_WhenBidIsDeleted()
+        public async Task DeleteCurvePoint_ReturnNoContent_WhenCurvePointIsDeleted()
         {
             // Arrange
-            var mockService = new Mock<IBidService>();
-            int bidId = 1;
-            mockService.Setup(service => service.DeleteAsync(bidId))
+            var mockService = new Mock<ICurvePointService>();
+            int curvePointId = 1;
+            mockService.Setup(service => service.DeleteAsync(curvePointId))
                        .ReturnsAsync(true);
-            var sut = new BidController(mockService.Object);
+            var sut = new CurvePointController(mockService.Object);
 
             // Act
-            var result = await sut.DeleteBid(bidId);
+            var result = await sut.DeleteCurvePoint(curvePointId);
 
             // Assert
             Assert.IsNotNull(result);
@@ -182,16 +183,16 @@ namespace P7CreateRestApi_Tests.Controllers
         }
 
         [TestMethod]
-        public async Task CreateBid_ReturnBadRequest_WhenModelIsInvalid()
+        public async Task CreateCurvePoint_ReturnBadRequest_WhenModelIsInvalid()
         {
             // Arrange
-            var mockService = new Mock<IBidService>();
-            var bidDto = new BidDto { Account = "", Type = "Type1", BidQuantity = 10 }; // Invalid Account
-            var sut = new BidController(mockService.Object);
+            var mockService = new Mock<ICurvePointService>();
+            var curvePointDto = new CurvePointDto { CurvePointValue = 10, AsOfDate = DateTime.Now, CreationDate = DateTime.Now, Term = 34 }; // Invalid Account
+            var sut = new CurvePointController(mockService.Object);
             sut.ModelState.AddModelError("Account", "Account is required.");
 
             // Act
-            var result = await sut.CreateBid(bidDto);
+            var result = await sut.CreateCurvePoint(curvePointDto);
 
             // Assert
             Assert.IsNotNull(result);
@@ -199,32 +200,32 @@ namespace P7CreateRestApi_Tests.Controllers
         }
 
         [TestMethod]
-        public async Task UpdateBid_ReturnBadRequest_WhenModelIsInvalid()
+        public async Task UpdateCurvePoint_ReturnBadRequest_WhenModelIsInvalid()
         {
             // Arrange
-            var mockService = new Mock<IBidService>();
-            int bidId = 1;
-            var bidDto = new BidDto { Account = "", Type = "Type1", BidQuantity = 10 }; // Invalid Account
-            var sut = new BidController(mockService.Object);
+            var mockService = new Mock<ICurvePointService>();
+            int curvePointId = 1;
+            var curvePointDto = new CurvePointDto { Id = 1, CurvePointValue = 12, AsOfDate = DateTime.Now, CreationDate = DateTime.Now, Term = 34 }; // Invalid Account
+            var sut = new CurvePointController(mockService.Object);
             sut.ModelState.AddModelError("Account", "Account is required.");
             // Act
-            var result = await sut.UpdateBid(bidId, bidDto);
+            var result = await sut.UpdateCurvePoint(curvePointId, curvePointDto);
             // Assert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
         }
 
         [TestMethod]
-        public async Task CreateBid_ReturnObjectResult_WhenProblemInCreation()
+        public async Task CreateCurvePoint_ReturnObjectResult_WhenProblemInCreation()
         {
             // Arrange
-            var mockService = new Mock<IBidService>();
-            var bidDto = new BidDto { Account = "Account1", Type = "Type1", BidQuantity = 10 };
-            mockService.Setup(service => service.CreateAsync(bidDto))
-                       .ReturnsAsync((BidDto?)null);
-            var sut = new BidController(mockService.Object);
+            var mockService = new Mock<ICurvePointService>();
+            var curvePointDto = new CurvePointDto { Id = 1, CurvePointValue = 12, AsOfDate = DateTime.Now, CreationDate = DateTime.Now, Term = 34 };
+            mockService.Setup(service => service.CreateAsync(curvePointDto))
+                       .ReturnsAsync((CurvePointDto?)null);
+            var sut = new CurvePointController(mockService.Object);
             // Act
-            var result = await sut.CreateBid(bidDto);
+            var result = await sut.CreateCurvePoint(curvePointDto);
             // Assert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(ObjectResult));

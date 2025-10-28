@@ -44,8 +44,8 @@ namespace P7CreateRestApi.Controllers
         [SwaggerDocumentation("rule", (int)CrudType.Create)]
         public async Task<IActionResult> CreateRule([FromBody] RuleDto ruleDto)
         {
-            var created = await _service.CreateAsync(ruleDto);
-            return CreatedAtAction(nameof(CreateRule), new { id = created.Id }, created); //201
+            var createdId = await _service.CreateAsync(ruleDto);
+            return CreatedAtAction(nameof(CreateRule), new { id = createdId }, ruleDto); //201
         }
 
         [HttpPut("{rule_id}")]
@@ -53,6 +53,7 @@ namespace P7CreateRestApi.Controllers
         public async Task<IActionResult> UpdateRule(int rule_id, [FromBody] RuleDto ruleDto)
         {
             var updated = await _service.UpdateAsync(rule_id, ruleDto);
+
             if (updated == null)
                 return NotFound(); //404
             else

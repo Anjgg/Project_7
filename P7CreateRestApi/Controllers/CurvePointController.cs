@@ -45,11 +45,11 @@ namespace P7CreateRestApi.Controllers
 
         [HttpPost]
         [SwaggerDocumentation("curve point", (int)CrudType.Create)]
-        public async Task<IActionResult> CreateCurvePoint([FromBody] CurvePointDto curvePoint)
+        public async Task<IActionResult> CreateCurvePoint([FromBody] CurvePointDto curvePointDto)
         {
-            var created = await _service.CreateAsync(curvePoint);
+            var createdId = await _service.CreateAsync(curvePointDto);
 
-            return CreatedAtAction(nameof(CreateCurvePoint), new { id = created.Id }, created); //201
+            return CreatedAtAction(nameof(CreateCurvePoint), new { id = createdId }, curvePointDto); //201
         }
 
         [HttpPut("{curve_point_id}")]

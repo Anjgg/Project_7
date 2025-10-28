@@ -9,7 +9,7 @@ namespace P7CreateRestApi.Services
     {
         Task<List<TradeDto>> GetAllAsync();
         Task<TradeDto?> GetByIdAsync(int id);
-        Task<TradeDto> CreateAsync(TradeDto tradeDto);
+        Task<int> CreateAsync(TradeDto tradeDto);
         Task<TradeDto?> UpdateAsync(int id, TradeDto tradeDto);
         Task<bool> DeleteAsync(int id);
     }
@@ -42,11 +42,11 @@ namespace P7CreateRestApi.Services
                 return _mapper.Map<TradeDto>(trade);
         }
 
-        public async Task<TradeDto> CreateAsync(TradeDto tradeDto)
+        public async Task<int> CreateAsync(TradeDto tradeDto)
         {
             var trade = _mapper.Map<Trade>(tradeDto);
             var created = await _repository.AddAsync(trade);
-            return _mapper.Map<TradeDto>(created);
+            return created.Id;
         }
 
         public async Task<TradeDto?> UpdateAsync(int id, TradeDto tradeDto)

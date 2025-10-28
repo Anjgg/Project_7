@@ -45,9 +45,9 @@ namespace P7CreateRestApi.Controllers
         [SwaggerDocumentation("rating", (int)CrudType.Create)]
         public async Task<IActionResult> CreateRating([FromBody] RatingDto ratingDto)
         {
-            var created = await _service.CreateAsync(ratingDto);
+            var createdId = await _service.CreateAsync(ratingDto);
 
-            return CreatedAtAction(nameof(CreateRating), new { id = created.Id }, created); //201
+            return CreatedAtAction(nameof(CreateRating), new { id = createdId }, ratingDto); //201
         }
 
         [HttpPut("{rating_id}")]

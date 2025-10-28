@@ -7,7 +7,7 @@ namespace P7CreateRestApi.Services
 {
     public interface IBidService
     {
-        Task<BidDto?> CreateAsync(BidDto bidModel);
+        Task<int> CreateAsync(BidDto bidModel);
         Task<bool> DeleteAsync(int id);
         Task<List<BidDto>> GetAllAsync();
         Task<BidDto?> GetByIdAsync(int id);
@@ -43,13 +43,13 @@ namespace P7CreateRestApi.Services
                 return _mapper.Map<BidDto>(bid);
         }
 
-        public async Task<BidDto?> CreateAsync(BidDto bidDto)
+        public async Task<int> CreateAsync(BidDto bidDto)
         {
             var bid = _mapper.Map<Bid>(bidDto);
 
             var created = await _repository.AddAsync(bid);
 
-            return _mapper.Map<BidDto>(created);
+            return created.Id;
         }
 
         public async Task<BidDto?> UpdateAsync(int id, BidDto bidDto)

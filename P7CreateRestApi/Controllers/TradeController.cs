@@ -44,8 +44,8 @@ namespace P7CreateRestApi.Controllers
         [SwaggerDocumentation("trade", (int)CrudType.Create)]
         public async Task<IActionResult> CreateTrade([FromBody] TradeDto tradeDto)
         {
-            var created = await _service.CreateAsync(tradeDto);
-            return CreatedAtAction(nameof(CreateTrade), new { id = created.Id }, created); //201
+            var createdId = await _service.CreateAsync(tradeDto);
+            return CreatedAtAction(nameof(CreateTrade), new { id = createdId }, tradeDto); //201
         }
 
         [HttpPut("{trade_id}")]
@@ -53,6 +53,7 @@ namespace P7CreateRestApi.Controllers
         public async Task<IActionResult> UpdateTrade(int trade_id, [FromBody] TradeDto tradeDto)
         {
             var updated = await _service.UpdateAsync(trade_id, tradeDto);
+
             if (updated == null)
                 return NotFound(); //404
             else

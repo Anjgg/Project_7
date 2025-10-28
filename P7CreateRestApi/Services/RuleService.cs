@@ -9,7 +9,7 @@ namespace P7CreateRestApi.Services
     {
         Task<List<RuleDto>> GetAllAsync();
         Task<RuleDto?> GetByIdAsync(int id);
-        Task<RuleDto> CreateAsync(RuleDto ruleDto);
+        Task<int> CreateAsync(RuleDto ruleDto);
         Task<RuleDto?> UpdateAsync(int id, RuleDto ruleDto);
         Task<bool> DeleteAsync(int id);
     }
@@ -42,11 +42,11 @@ namespace P7CreateRestApi.Services
                 return _mapper.Map<RuleDto>(rule);
         }
 
-        public async Task<RuleDto> CreateAsync(RuleDto ruleDto)
+        public async Task<int> CreateAsync(RuleDto ruleDto)
         {
             var rule = _mapper.Map<Rule>(ruleDto);
             var created = await _repository.AddAsync(rule);
-            return _mapper.Map<RuleDto>(created);
+            return created.Id;
         }
 
         public async Task<RuleDto?> UpdateAsync(int id, RuleDto ruleDto)
