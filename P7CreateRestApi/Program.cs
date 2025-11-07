@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using P7CreateRestApi;
 using P7CreateRestApi.Config;
 using P7CreateRestApi.Data;
 using P7CreateRestApi.Domain;

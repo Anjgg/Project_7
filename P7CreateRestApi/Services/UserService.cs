@@ -8,7 +8,7 @@ namespace P7CreateRestApi.Services
     {
         Task<(bool, List<string>?)> CreateAsync(CreateUserDto userDto);
         Task<(bool, List<string>?)> DeleteAsync(string id);
-        List<UserDto> GetAllUsers();
+        List<UserDto>? GetAllUsers();
         Task<UserDto?> GetByIdAsync(string id);
         Task<(bool, List<string>?)> UpdateAsync(string id, UpdateUserDto user);
     }
@@ -61,7 +61,7 @@ namespace P7CreateRestApi.Services
             return (false, new List<string>() { "User not found" });
         }
 
-        public List<UserDto> GetAllUsers()
+        public List<UserDto>? GetAllUsers()
         {
             return _userManager.Users
                 .Select(user => new UserDto(

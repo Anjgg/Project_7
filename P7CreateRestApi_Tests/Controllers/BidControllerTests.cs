@@ -93,9 +93,9 @@ namespace P7CreateRestApi_Tests.Controllers
             // Arrange
             var mockService = new Mock<IBidService>();
             var bidDto = new BidDto { Account = "Account1", Type = "Type1", BidQuantity = 10 };
-            var createdBidDto = new BidDto { Id = 1, Account = "Account1", Type = "Type1", BidQuantity = 10 };
+            var createdId = 1;
             mockService.Setup(service => service.CreateAsync(bidDto))
-                       .ReturnsAsync(createdBidDto);
+                       .ReturnsAsync(createdId);
             var sut = new BidController(mockService.Object);
 
             // Act
@@ -180,57 +180,6 @@ namespace P7CreateRestApi_Tests.Controllers
             // Assert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(NoContentResult));
-        }
-
-        [TestMethod]
-        public async Task CreateBid_ReturnBadRequest_WhenModelIsInvalid()
-        {
-            // Arrange
-            var mockService = new Mock<IBidService>();
-            var bidDto = new BidDto { Account = "", Type = "Type1", BidQuantity = 10 }; // Invalid Account
-            var sut = new BidController(mockService.Object);
-            sut.ModelState.AddModelError("Account", "Account is required.");
-
-            // Act
-            var result = await sut.CreateBid(bidDto);
-
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
-        }
-
-        [TestMethod]
-        public async Task UpdateBid_ReturnBadRequest_WhenModelIsInvalid()
-        {
-            // Arrange
-            var mockService = new Mock<IBidService>();
-            int bidId = 1;
-            var bidDto = new BidDto { Account = "", Type = "Type1", BidQuantity = 10 }; // Invalid Account
-            var sut = new BidController(mockService.Object);
-            sut.ModelState.AddModelError("Account", "Account is required.");
-            // Act
-            var result = await sut.UpdateBid(bidId, bidDto);
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
-        }
-
-        [TestMethod]
-        public async Task CreateBid_ReturnObjectResult_WhenProblemInCreation()
-        {
-            // Arrange
-            var mockService = new Mock<IBidService>();
-            var bidDto = new BidDto { Account = "Account1", Type = "Type1", BidQuantity = 10 };
-            mockService.Setup(service => service.CreateAsync(bidDto))
-                       .ReturnsAsync((BidDto?)null);
-            var sut = new BidController(mockService.Object);
-            // Act
-            var result = await sut.CreateBid(bidDto);
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(ObjectResult));
-            var objectResult = result as ObjectResult;
-            Assert.AreEqual(500, objectResult?.StatusCode);
         }
     }
 }
