@@ -20,7 +20,7 @@ namespace P7CreateRestApi.Dto
         [Required, StringLength(50)]
         public string Benchmark { get; set; } = string.Empty;
 
-        [Required, DataType(DataType.Date)]
+        [Required, DataType(DataType.DateTime)]
         public DateTime? BidDate { get; set; }
 
         [StringLength(500)]

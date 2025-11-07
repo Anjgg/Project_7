@@ -10,7 +10,7 @@ namespace P7CreateRestApi.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/curve-points")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class CurvePointController : ControllerBase
     {
         private readonly ICurvePointService _service;
@@ -49,7 +49,7 @@ namespace P7CreateRestApi.Controllers
         {
             var createdId = await _service.CreateAsync(curvePointDto);
 
-            return CreatedAtAction(nameof(CreateCurvePoint), new { id = createdId }, curvePointDto); //201
+            return CreatedAtAction(nameof(CreateCurvePoint), new { Message = "Creation was successful", Id = createdId }); //201
         }
 
         [HttpPut("{curve_point_id}")]

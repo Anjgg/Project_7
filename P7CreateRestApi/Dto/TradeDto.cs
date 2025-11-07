@@ -5,6 +5,7 @@ namespace P7CreateRestApi.Dto
     public class TradeDto
     {
         public int Id { get; set; }
+
         [Required, StringLength(50)]
         public string Account { get; set; } = string.Empty;
 
@@ -23,7 +24,7 @@ namespace P7CreateRestApi.Dto
         [Range(0.0001, double.MaxValue, ErrorMessage = "SellPrice must be positive")]
         public double? SellPrice { get; set; }
 
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         public DateTime? TradeDate { get; set; }
 
         [Required, StringLength(50)]
