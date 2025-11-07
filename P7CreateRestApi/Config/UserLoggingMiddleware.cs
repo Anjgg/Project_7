@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace P7CreateRestApi;
+namespace P7CreateRestApi.Config;
 
 public class UserLoggingMiddleware
 {
