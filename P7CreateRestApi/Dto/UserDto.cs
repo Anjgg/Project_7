@@ -1,6 +1,8 @@
-﻿namespace P7CreateRestApi.Dto
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace P7CreateRestApi.Dto
 {
-    public record CreateUserDto(string email, string password, string? role);
-    public record UserDto(string id, string email, IList<string> roles);
+    public record CreateUserDto([Required, EmailAddress] string email, [Required, MinLength(6)] string password, [Required] string? role);
+    public record UserDto([Required] string id, [Required, EmailAddress] string email, [Required] IList<string> roles);
     public record class UpdateUserDto(string? email, string? password, string? role);
 }
