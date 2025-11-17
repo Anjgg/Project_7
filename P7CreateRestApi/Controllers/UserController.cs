@@ -10,7 +10,7 @@ namespace P7CreateRestApi.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/users")]
-    [Authorize("Admin")]
+    [Authorize(Roles="Admin")]
 
     public class UserController : ControllerBase
     {
