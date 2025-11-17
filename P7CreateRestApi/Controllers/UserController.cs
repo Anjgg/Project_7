@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Dto;
 using P7CreateRestApi.Services;
@@ -9,7 +10,7 @@ namespace P7CreateRestApi.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/users")]
-
+    [Authorize(Roles="Admin")]
 
     public class UserController : ControllerBase
     {

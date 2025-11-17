@@ -52,7 +52,7 @@ namespace P7CreateRestApi.Controllers
         {
             var createdId = await _service.CreateAsync(bidDto);
             
-            return CreatedAtAction(nameof(CreateBid), new { id = createdId }, bidDto); //201
+            return CreatedAtAction(nameof(CreateBid), new { Message = "Creation was successful", Id = createdId }); //201
         }
 
         [HttpPut("{bid_id}")]

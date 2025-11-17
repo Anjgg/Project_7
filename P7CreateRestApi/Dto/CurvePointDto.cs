@@ -5,7 +5,7 @@ namespace P7CreateRestApi.Dto
     public class CurvePointDto
     {
         public int Id { get; set; }
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         public DateTime? AsOfDate { get; set; }
 
         [Range(0.0001, double.MaxValue, ErrorMessage = "Term must be positive")]

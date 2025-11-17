@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Domain;
 using P7CreateRestApi.Dto;
@@ -8,6 +9,7 @@ namespace P7CreateRestApi.Controllers
 {
 
     [ApiController]
+    [AllowAnonymous]    
     [Route("api/v{version:apiVersion}")]
     public class AuthentificationController : ControllerBase
     {

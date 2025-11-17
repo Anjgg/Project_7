@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Dto;
 using P7CreateRestApi.Services;
@@ -9,6 +10,7 @@ namespace P7CreateRestApi.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/trades")]
+    [Authorize]
     public class TradeController : ControllerBase
     {
         private readonly ITradeService _service;
@@ -45,7 +47,7 @@ namespace P7CreateRestApi.Controllers
         public async Task<IActionResult> CreateTrade([FromBody] TradeDto tradeDto)
         {
             var createdId = await _service.CreateAsync(tradeDto);
-            return CreatedAtAction(nameof(CreateTrade), new { id = createdId }, tradeDto); //201
+            return CreatedAtAction(nameof(CreateTrade), new { Message = "Creation was successful", Id = createdId }); //201
         }
 
         [HttpPut("{trade_id}")]

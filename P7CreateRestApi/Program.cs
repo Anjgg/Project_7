@@ -76,10 +76,10 @@ builder.Services.AddAutoMapper(config =>
 builder.Services
     .AddIdentity<User, IdentityRole>(options =>
     {
-        options.Password.RequireDigit = false;
-        options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequireUppercase = false;
-        options.Password.RequiredLength = 6;
+        options.Password.RequireDigit = true;
+        options.Password.RequireNonAlphanumeric = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequiredLength = 8;
     })
     .AddEntityFrameworkStores<LocalDbContext>()
     .AddDefaultTokenProviders();
@@ -89,6 +89,7 @@ builder.Services
  * ---- JWT Authentication Configuration ----
  * ------------------------------------------ */
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+var jwtOptions = builder.Configuration.GetSection("Jwt").Get<JwtOptions>()!;
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = "Bearer";
@@ -105,9 +106,9 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration.GetValue<string>("Jwt:Issuer")!,
-        ValidAudience = builder.Configuration.GetValue<string>("Jwt:Audience")!,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("Jwt:Key")!))
+        ValidIssuer = jwtOptions.Issuer,
+        ValidAudience = jwtOptions.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key))
     };
 });
 builder.Services.AddAuthorization();

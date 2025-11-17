@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Dto;
 using P7CreateRestApi.Services;
@@ -9,6 +10,7 @@ namespace P7CreateRestApi.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/ratings")]
+    [Authorize]
     public class RatingController : ControllerBase
     {
         private readonly IRatingService _service;
@@ -47,7 +49,7 @@ namespace P7CreateRestApi.Controllers
         {
             var createdId = await _service.CreateAsync(ratingDto);
 
-            return CreatedAtAction(nameof(CreateRating), new { id = createdId }, ratingDto); //201
+            return CreatedAtAction(nameof(CreateRating), new { Message = "Creation was successful", Id = createdId }); //201
         }
 
         [HttpPut("{rating_id}")]

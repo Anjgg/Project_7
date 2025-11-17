@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using P7CreateRestApi.Dto;
 using P7CreateRestApi.Services;
@@ -9,6 +10,7 @@ namespace P7CreateRestApi.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/rules")]
+    [Authorize]
     public class RuleController : ControllerBase
     {
         private readonly IRuleService _service;
@@ -45,7 +47,7 @@ namespace P7CreateRestApi.Controllers
         public async Task<IActionResult> CreateRule([FromBody] RuleDto ruleDto)
         {
             var createdId = await _service.CreateAsync(ruleDto);
-            return CreatedAtAction(nameof(CreateRule), new { id = createdId }, ruleDto); //201
+            return CreatedAtAction(nameof(CreateRule), new { Message = "Creation was successful", Id = createdId }); //201
         }
 
         [HttpPut("{rule_id}")]
